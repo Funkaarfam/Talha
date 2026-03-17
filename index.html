@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Talha — VFX Artist & Video Editor</title>
+  <meta name="description" content="Talha is a VFX Artist and Video Editor crafting cinematic visual experiences." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <nav class="nav" id="nav">
+    <a href="index.html" class="nav-logo">TALHA<span>.</span></a>
+    <ul class="nav-links" role="list">
+      <li><a href="#work">Work</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-right"><span class="avail-dot"></span>Available</div>
+    <button class="nav-menu-btn" id="menuBtn" aria-label="Menu" aria-expanded="false"><span></span><span></span></button>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <a href="#work"        class="mm-link">Work<span>.</span></a>
+    <a href="#about"       class="mm-link">About<span>.</span></a>
+    <a href="#skills"      class="mm-link">Skills<span>.</span></a>
+    <a href="contact.html" class="mm-link">Contact<span>.</span></a>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-left">
+      <div class="hero-index">Portfolio — 2026</div>
+      <div class="hero-title-block">
+        <p class="hero-label">VFX Artist &amp; Video Editor</p>
+        <h1 class="hero-h1">CRAFT<br>ING<br><em>CIN</em><br>EMA</h1>
+        <p class="hero-desc">Talha brings stories to life through visual effects, motion design, and precision post-production. Every frame is a decision. Every cut is intentional.</p>
+        <div class="hero-btns">
+          <a href="#work" class="btn-primary">View Work →</a>
+          <a href="contact.html" class="btn-outline">Get in Touch</a>
+        </div>
+      </div>
+      <div class="hero-footer">
+        <span>Est. 2018</span>
+        <span>50+ Projects</span>
+        <span>30+ Clients</span>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-big-num" aria-hidden="true">VFX</div>
+      <div class="hero-photo-wrap">
+        <img src="talha.png" alt="Talha — VFX Artist" class="hero-photo" />
+        <div class="hero-photo-caption"><span>Talha</span><span>VFX <span>·</span> Editor</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TICKER -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      <span class="ticker-item">Visual Effects</span><span class="ticker-item">Color Grading</span><span class="ticker-item">Motion Design</span><span class="ticker-item">Compositing</span><span class="ticker-item">3D Integration</span><span class="ticker-item">Post Production</span><span class="ticker-item">Visual Effects</span><span class="ticker-item">Color Grading</span><span class="ticker-item">Motion Design</span><span class="ticker-item">Compositing</span><span class="ticker-item">3D Integration</span><span class="ticker-item">Post Production</span>
+    </div>
+  </div>
+
+  <!-- WORK -->
+  <section class="work" id="work">
+    <div class="work-header">
+      <span class="work-header-num">02</span>
+      <h2>SELECTED WORK</h2>
+      <span class="work-header-count">04 Projects</span>
+    </div>
+    <div class="work-grid">
+      <article class="wi wi-large" data-reveal>
+        <div class="wi-visual wv1">
+          <video class="wi-bg-video" src="Project1.mp4" muted loop playsinline></video>
+          <div class="wi-num-bg" aria-hidden="true">01</div>
+          <span class="wi-category">Feature Film</span>
+          <button class="wi-play" onclick="openVideo('Project1.mp4')" aria-label="Play video"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></button>
+        </div>
+        <div class="wi-meta">
+          <span class="wi-num">01</span>
+          <div class="wi-text"><h3>Country Club</h3><p>Country Club Estate</p></div>
+          <div class="wi-tags"><span>VFX</span><span>Compositing</span><span>Film</span></div>
+        </div>
+      </article>
+      <article class="wi" data-reveal>
+        <div class="wi-visual wv2">
+          <video class="wi-bg-video" src="Project2.mp4" muted loop playsinline></video>
+          <div class="wi-num-bg" aria-hidden="true">02</div>
+          <span class="wi-category">Brand Video</span>
+          <button class="wi-play" onclick="openVideo('Project2.mp4')" aria-label="Play video"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></button>
+        </div>
+        <div class="wi-meta">
+          <span class="wi-num">02</span>
+          <div class="wi-text"><h3>Brand Video</h3><p>Hunger ends here</p></div>
+          <div class="wi-tags"><span>Motion</span><span>Brand</span></div>
+        </div>
+      </article>
+      <article class="wi" data-reveal>
+        <div class="wi-visual wv3">
+          <video class="wi-bg-video" src="project3.mp4" muted loop playsinline></video>
+          <div class="wi-num-bg" aria-hidden="true">03</div>
+          <span class="wi-category">Brand Video</span>
+          <button class="wi-play" onclick="openVideo('project3.mp4')" aria-label="Play video"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></button>
+        </div>
+        <div class="wi-meta">
+          <span class="wi-num">03</span>
+          <div class="wi-text"><h3>Brand Video</h3><p>Sitara fashion film</p></div>
+          <div class="wi-tags"><span>VFX</span><span>Grade</span></div>
+        </div>
+      </article>
+      <article class="wi" data-reveal>
+        <div class="wi-visual wv4">
+          <video class="wi-bg-video" src="project4.mp4" muted loop playsinline></video>
+          <div class="wi-num-bg" aria-hidden="true">04</div>
+          <span class="wi-category">VFX Edit</span>
+          <button class="wi-play" onclick="openVideo('project4.mp4')" aria-label="Play video"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></button>
+        </div>
+        <div class="wi-meta">
+          <span class="wi-num">04</span>
+          <div class="wi-text"><h3>VFX Edit</h3><p>Beyond the screen</p></div>
+          <div class="wi-tags"><span>Sci-Fi</span><span>Particles</span></div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="about-left" data-reveal>
+      <div>
+        <p class="about-section-label">03 — About</p>
+        <h2 class="about-h2">EVERY<br>FRAME<br><em>TELLS</em><br>A STORY</h2>
+        <p class="about-p">I'm Talha — a VFX artist and video editor with a passion for creating visuals that make audiences forget they're watching pixels. From blockbuster-scale compositing to intimate brand storytelling, I bring technical precision and artistic intuition to every project.</p>
+        <p class="about-p">With over 6 years in post-production, I've collaborated with directors, studios, and brands across film, commercials, and music videos — always pushing the boundary between real and imagined.</p>
+      </div>
+      <div class="about-stats">
+        <div class="astat"><span class="astat-num">6+</span><span class="astat-label">Years exp.</span></div>
+        <div class="astat"><span class="astat-num">50+</span><span class="astat-label">Projects</span></div>
+        <div class="astat"><span class="astat-num">30+</span><span class="astat-label">Clients</span></div>
+      </div>
+    </div>
+    <div class="about-right">
+      <div class="about-photo-block">
+        <img src="talha.png" alt="Talha" />
+        <div class="about-photo-overlay"><strong>50+</strong><span>Projects<br>Delivered</span></div>
+      </div>
+      <div class="about-timeline">
+        <div class="tl-col"><span class="tl-year">2018</span><p class="tl-event">Started in post-production</p></div>
+        <div class="tl-col"><span class="tl-year">2020</span><p class="tl-event">First feature film credit</p></div>
+        <div class="tl-col"><span class="tl-year">2022</span><p class="tl-event">Launched freelance studio</p></div>
+        <div class="tl-col"><span class="tl-year">Now</span><p class="tl-event">50+ projects, 30+ clients</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section class="skills" id="skills">
+    <div class="skills-header">
+      <span class="skills-header-num">04</span>
+      <h2>SKILLS &amp; TOOLS</h2>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-col" data-reveal>
+        <p class="sk-head">Craft</p>
+        <div class="sbars">
+          <div class="sbar"><div class="sbar-row"><span class="sbar-name">Visual Effects</span><span class="sbar-pct">95%</span></div><div class="sb-track"><div class="sb-fill" data-w="95"></div></div></div>
+          <div class="sbar"><div class="sbar-row"><span class="sbar-name">Video Editing</span><span class="sbar-pct">92%</span></div><div class="sb-track"><div class="sb-fill" data-w="92"></div></div></div>
+          <div class="sbar"><div class="sbar-row"><span class="sbar-name">Compositing</span><span class="sbar-pct">90%</span></div><div class="sb-track"><div class="sb-fill" data-w="90"></div></div></div>
+          <div class="sbar"><div class="sbar-row"><span class="sbar-name">Color Grading</span><span class="sbar-pct">88%</span></div><div class="sb-track"><div class="sb-fill" data-w="88"></div></div></div>
+          <div class="sbar"><div class="sbar-row"><span class="sbar-name">Motion Graphics</span><span class="sbar-pct">85%</span></div><div class="sb-track"><div class="sb-fill" data-w="85"></div></div></div>
+          <div class="sbar"><div class="sbar-row"><span class="sbar-name">3D Integration</span><span class="sbar-pct">78%</span></div><div class="sb-track"><div class="sb-fill" data-w="78"></div></div></div>
+        </div>
+      </div>
+      <div class="skill-col" data-reveal>
+        <p class="sk-head">Software</p>
+        <div class="tools">
+          <span class="tool featured">After Effects</span><span class="tool">Premiere Pro</span><span class="tool featured">DaVinci Resolve</span><span class="tool">Nuke</span><span class="tool">Blender</span><span class="tool">Cinema 4D</span><span class="tool">Mocha Pro</span><span class="tool">Photoshop</span><span class="tool">Houdini</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <div class="cta-band" data-reveal>
+    <div class="cta-band-left">
+      <p>READY TO CREATE<br>SOMETHING <em>UNFORGETTABLE?</em></p>
+    </div>
+    <div class="cta-band-right">
+      <a href="contact.html" class="btn-primary">Start a Project →</a>
+      <a href="work.html" class="btn-outline">See All Work</a>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-top">
+      <div class="footer-logo-col">
+        <div class="footer-logo">T<span>.</span></div>
+        <p class="footer-tagline">Making the impossible<br>look inevitable.</p>
+      </div>
+      <div class="footer-col">
+        <p class="fc-label">Navigate</p>
+        <a href="#work">Work</a><a href="#about">About</a><a href="#skills">Skills</a><a href="contact.html">Contact</a>
+      </div>
+      <div class="footer-col">
+        <p class="fc-label">Connect</p>
+        <a href="#">Instagram</a><a href="#">Vimeo</a><a href="#">LinkedIn</a><a href="#">Behance</a>
+      </div>
+      <div class="footer-col">
+        <p class="fc-label">Get in touch</p>
+        <a href="mailto:Talhaavaan@gmail.com">Talhaavaan@gmail.com</a>
+        <a href="contact.html" class="btn-primary" style="margin-top:.75rem">Start a Project →</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Talha. All rights reserved.</span>
+      <strong>VFX Artist &amp; Video Editor</strong>
+    </div>
+    <div class="footer-credit">
+      Made with precision by <a href="https://co3er.site" target="_blank" rel="noopener">Co3er Development</a>
+    </div>
+  </footer>
+
+  <div class="vmodal" id="vmodal">
+    <div class="vmodal-inner">
+      <button class="vmodal-close" aria-label="Close video">Close</button>
+      <video class="vmodal-video" id="vmodal-video" controls></video>
+    </div>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>

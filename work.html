@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Work — Talha VFX</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <nav class="nav" id="nav">
+    <a href="index.html" class="nav-logo">TALHA<span>.</span></a>
+    <ul class="nav-links" role="list">
+      <li><a href="work.html">Work</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="index.html#skills">Skills</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-right"><span class="avail-dot"></span>Available</div>
+    <button class="nav-menu-btn" id="menuBtn" aria-label="Menu" aria-expanded="false"><span></span><span></span></button>
+  </nav>
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <a href="work.html"         class="mm-link">Work<span>.</span></a>
+    <a href="about.html"        class="mm-link">About<span>.</span></a>
+    <a href="index.html#skills" class="mm-link">Skills<span>.</span></a>
+    <a href="contact.html"      class="mm-link">Contact<span>.</span></a>
+  </div>
+
+  <div class="work-page-hero">
+    <div class="work-page-hero-inner">
+      <div class="work-page-hero-left">
+        <h1>EVERY<br><em>FRAME</em><br>MATTERS</h1>
+      </div>
+      <div class="work-page-hero-right">
+        <p>A curated collection of VFX, editing, and motion work spanning film, commercial, and music video.</p>
+        <a href="contact.html" class="btn-primary">Start a Project →</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="filter-bar">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="vfx">VFX</button>
+    <button class="filter-btn" data-filter="editing">Editing</button>
+    <button class="filter-btn" data-filter="motion">Motion</button>
+    <button class="filter-btn" data-filter="commercial">Commercial</button>
+  </div>
+
+  <div class="all-work-grid">
+    <article class="work-item" data-cat="vfx">
+      <div class="work-visual wv1">
+        <video class="wi-bg-video" src="project1.mp4" muted loop playsinline></video>
+        <div class="wi-overlay" style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.7) 0%,transparent 60%);z-index:1;"></div>
+        <div class="work-visual-inner"><button class="play-ring" onclick="openVideo('project1.mp4')" aria-label="Play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></button></div>
+      </div>
+      <div class="work-meta">
+        <span class="work-num">01</span>
+        <div><div class="work-title">Country Club</div><div class="work-desc">Feature film VFX</div></div>
+        <div class="work-tags"><span>VFX</span><span>Film</span></div>
+      </div>
+    </article>
+    <article class="work-item" data-cat="motion">
+      <div class="work-visual wv2">
+        <video class="wi-bg-video" src="project2.mp4" muted loop playsinline></video>
+        <div class="work-visual-inner"><button class="play-ring" onclick="openVideo('project2.mp4')" aria-label="Play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></button></div>
+      </div>
+      <div class="work-meta">
+        <span class="work-num">02</span>
+        <div><div class="work-title">Brand Video</div><div class="work-desc">Brand film motion</div></div>
+        <div class="work-tags"><span>Motion</span><span>Brand</span></div>
+      </div>
+    </article>
+    <article class="work-item" data-cat="vfx editing">
+      <div class="work-visual wv3">
+        <video class="wi-bg-video" src="project3.mp4" muted loop playsinline></video>
+        <div class="work-visual-inner"><button class="play-ring" onclick="openVideo('project3.mp4')" aria-label="Play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></button></div>
+      </div>
+      <div class="work-meta">
+        <span class="work-num">03</span>
+        <div><div class="work-title">Brand Video</div><div class="work-desc">Sitara fashion film</div></div>
+        <div class="work-tags"><span>VFX</span><span>Grade</span></div>
+      </div>
+    </article>
+    <article class="work-item" data-cat="vfx">
+      <div class="work-visual wv4">
+        <video class="wi-bg-video" src="project4.mp4" muted loop playsinline></video>
+        <div class="work-visual-inner"><button class="play-ring" onclick="openVideo('project4.mp4')" aria-label="Play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></button></div>
+      </div>
+      <div class="work-meta">
+        <span class="work-num">04</span>
+        <div><div class="work-title">VFX Edit</div><div class="work-desc">Sci-fi particles</div></div>
+        <div class="work-tags"><span>Sci-Fi</span></div>
+      </div>
+    </article>
+    <article class="work-item" data-cat="commercial editing">
+      <div class="work-visual wv5">
+        <video class="wi-bg-video" src="project5.mp4" muted loop playsinline></video>
+        <div class="work-visual-inner"><button class="play-ring" onclick="openVideo('project5.mp4')" aria-label="Play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></button></div>
+      </div>
+      <div class="work-meta">
+        <span class="work-num">05</span>
+        <div><div class="work-title">Gold Standard</div><div class="work-desc">Luxury commercial</div></div>
+        <div class="work-tags"><span>Commercial</span></div>
+      </div>
+    </article>
+    <article class="work-item" data-cat="motion commercial">
+      <div class="work-visual wv6">
+        <video class="wi-bg-video" src="project6.mp4" muted loop playsinline></video>
+        <div class="work-visual-inner"><button class="play-ring" onclick="openVideo('project6.mp4')" aria-label="Play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></button></div>
+      </div>
+      <div class="work-meta">
+        <span class="work-num">06</span>
+        <div><div class="work-title">Pacific Drift</div><div class="work-desc">Travel brand film</div></div>
+        <div class="work-tags"><span>Motion</span></div>
+      </div>
+    </article>
+  </div>
+
+  <div class="work-page-footer-cta">
+    <h2>HAVE A PROJECT<br>IN <em>MIND?</em></h2>
+    <a href="contact.html" class="btn-primary">Start a Conversation →</a>
+  </div>
+
+  <div class="vmodal" id="vmodal">
+    <div class="vmodal-inner">
+      <button class="vmodal-close" aria-label="Close video">Close</button>
+      <video class="vmodal-video" id="vmodal-video" controls></video>
+    </div>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>
