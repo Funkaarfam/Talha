@@ -1,0 +1,23 @@
+{
+  "headers": [
+    {
+      "source": "/(.*\\.js|.*\\.css|.*\\.json)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/main.js",
+      "destination": "/404.html"
+    },
+    {
+      "source": "/styles.css",
+      "destination": "/404.html"
+    }
+  ]
+}
