@@ -1,298 +1,93 @@
-
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-.hk{
-  min-height:100vh;
-  font-family:'Courier New',monospace;
-  overflow:hidden;position:relative;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:2rem 1rem;
-  background:#000;
-  animation:bw-blink 0.18s step-end infinite;
-}
-@keyframes bw-blink{
-  0%{background:#000;color:#fff;filter:invert(0)}
-  25%{background:#fff;color:#000;filter:invert(1)}
-  50%{background:#000;color:#fff;filter:invert(0)}
-  75%{background:#111;color:#eee;filter:invert(0) contrast(2)}
-  100%{background:#000;color:#fff;filter:invert(0)}
-}
-canvas#rain{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;mix-blend-mode:difference}
-.scanlines{
-  position:absolute;top:0;left:0;width:100%;height:100%;
-  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(255,255,255,0.06) 2px,rgba(255,255,255,0.06) 4px);
-  pointer-events:none;z-index:4;
-  animation:sl 0.1s linear infinite;
-}
-@keyframes sl{0%{background-position:0 0}100%{background-position:0 8px}}
-.vignette{
-  position:absolute;top:0;left:0;width:100%;height:100%;
-  background:radial-gradient(ellipse at center,transparent 25%,rgba(0,0,0,0.95) 100%);
-  pointer-events:none;z-index:3;
-  animation:vig-blink 0.18s step-end infinite;
-}
-@keyframes vig-blink{
-  0%,50%{background:radial-gradient(ellipse at center,transparent 25%,rgba(0,0,0,0.95) 100%)}
-  25%,75%{background:radial-gradient(ellipse at center,transparent 25%,rgba(255,255,255,0.6) 100%)}
-}
-.content{position:relative;z-index:10;text-align:center;width:100%;max-width:700px}
-
-/* GHOST */
-.ghost-container{
-  position:relative;margin:0 auto 0.6rem;width:110px;height:150px;
-  animation:ghost-float 2.8s ease-in-out infinite;
-  filter:drop-shadow(0 0 20px rgba(255,255,255,0.8));
-}
-@keyframes ghost-float{
-  0%,100%{transform:translateY(0) rotate(-1.5deg)}
-  33%{transform:translateY(-16px) rotate(2deg)}
-  66%{transform:translateY(-7px) rotate(-2.5deg)}
-}
-.ghost-svg{width:110px;height:150px}
-
-.hk-title{
-  font-size:clamp(22px,5vw,46px);font-weight:900;
-  letter-spacing:0.1em;text-transform:uppercase;
-  animation:title-chaos 0.2s step-end infinite;
-  margin-bottom:0.3rem;
-}
-@keyframes title-chaos{
-  0%{color:#fff;text-shadow:0 0 10px #fff,0 0 30px #fff}
-  33%{color:#000;text-shadow:none}
-  66%{color:#fff;text-shadow:-4px 0 #0ff,4px 0 #f0f}
-  100%{color:#eee;text-shadow:0 0 20px #fff}
-}
-.hk-by{font-size:12px;letter-spacing:0.4em;text-transform:uppercase;margin-bottom:0.8rem;animation:inv 0.18s step-end infinite}
-@keyframes inv{0%,50%{color:#888}25%,75%{color:#777}}
-.divider{width:100%;height:1px;margin:0.7rem 0;animation:div-blink 0.18s step-end infinite}
-@keyframes div-blink{
-  0%,50%{background:linear-gradient(90deg,transparent,#fff,transparent)}
-  25%,75%{background:linear-gradient(90deg,transparent,#000,transparent)}
-}
-.brand{
-  font-size:clamp(20px,4.5vw,40px);font-weight:900;letter-spacing:0.18em;text-transform:uppercase;
-  animation:brand-chaos 0.18s step-end infinite;
-  margin:0.6rem 0 0.2rem;
-}
-@keyframes brand-chaos{
-  0%{color:#fff;text-shadow:0 0 15px #fff,0 0 50px #fff}
-  25%{color:#000;text-shadow:none}
-  50%{color:#fff;text-shadow:-3px 0 #0ff,3px 0 #f0f,0 0 30px #fff}
-  75%{color:#ccc;text-shadow:0 0 8px #fff}
-}
-.brand-sub{font-size:10px;letter-spacing:0.4em;text-transform:uppercase;margin-bottom:1rem;animation:inv 0.2s step-end infinite}
-.terminal{
-  background:#000;
-  border-animation:tb 0.18s step-end infinite;
-  border:1px solid #fff;
-  border-radius:3px;padding:0.8rem 1rem;text-align:left;
-  font-size:clamp(9px,1.4vw,11px);
-  margin:0.7rem 0;min-height:90px;
-  animation:term-blink 0.18s step-end infinite;
-}
-@keyframes term-blink{
-  0%,50%{background:#000;color:#ccc;border-color:#fff}
-  25%,75%{background:#fff;color:#000;border-color:#000}
-}
-.cursor{display:inline-block;width:7px;height:1em;animation:bc 0.7s step-end infinite;vertical-align:text-bottom;margin-left:1px}
-@keyframes bc{
-  0%,50%{background:#fff;opacity:1}
-  25%,75%{background:#000;opacity:1}
-  51%{opacity:0}100%{opacity:1}
-}
-.msgs{margin:0.8rem 0}
-.msg-line{
-  font-size:clamp(10px,1.7vw,12px);letter-spacing:0.08em;line-height:2.2;
-  animation:msg-blink 0.2s step-end infinite;
-}
-.msg-line:nth-child(2){animation-delay:.04s}.msg-line:nth-child(3){animation-delay:.08s}
-@keyframes msg-blink{
-  0%,50%{color:#fff;text-shadow:0 0 6px #fff}
-  25%,75%{color:#333;text-shadow:none}
-}
-.blood-drips{display:flex;justify-content:center;gap:6px;margin:0.4rem 0}
-.drip{width:5px;border-radius:0 0 8px 8px;animation:da 1.8s ease-in infinite}
-@keyframes da{
-  0%{height:3px;opacity:0;background:#fff}
-  20%{opacity:1}
-  50%{background:#000}
-  80%{height:30px;opacity:1}
-  100%{height:38px;opacity:0}
-}
-.footer{margin-top:1rem;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;animation:inv 0.2s step-end infinite}
-.screen-fx{animation:sfx 5s infinite}
-@keyframes sfx{0%,95%,100%{filter:none}96%{filter:invert(1) hue-rotate(90deg)}97%{filter:none}98%{filter:contrast(10)}99%{filter:none}}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#000;color:#fff;font-family:'Courier New',monospace;min-height:100vh;overflow:hidden;}
+.wrap{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 20px;position:relative;z-index:2;}
+canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;}
+.logo-ring{width:120px;height:120px;border-radius:50%;border:3px solid #00cc44;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;animation:ring-pulse 2s ease-in-out infinite;position:relative;}
+.logo-ring::before{content:'';position:absolute;inset:-8px;border-radius:50%;border:1px solid rgba(0,204,68,0.3);animation:ring-pulse 2s ease-in-out infinite 0.5s;}
+.logo-inner{font-size:32px;font-weight:900;color:#00cc44;letter-spacing:2px;text-shadow:0 0 20px #00cc44;}
+.pk-badge{background:#006400;color:#ffffff;font-size:13px;font-weight:700;letter-spacing:3px;padding:6px 20px;border-radius:4px;margin-bottom:20px;border:1px solid #00cc44;text-transform:uppercase;animation:badge-glow 1.5s ease-in-out infinite alternate;}
+.title{font-size:clamp(28px,6vw,64px);font-weight:900;color:#ffffff;letter-spacing:6px;text-transform:uppercase;margin-bottom:6px;line-height:1.1;}
+.title span{color:#00cc44;}
+.subtitle{font-size:clamp(13px,2.5vw,20px);color:#888;letter-spacing:4px;text-transform:uppercase;margin-bottom:32px;}
+.divider{width:200px;height:1px;background:#00cc44;margin:0 auto 28px;opacity:0.6;}
+.coming-soon{font-size:clamp(16px,3.5vw,36px);font-weight:900;color:#00cc44;letter-spacing:8px;text-transform:uppercase;animation:blink-green 1s infinite;margin-bottom:28px;text-shadow:0 0 15px #00cc44;}
+.countdown-row{display:flex;gap:16px;justify-content:center;margin-bottom:32px;}
+.count-box{text-align:center;background:rgba(0,204,68,0.08);border:1px solid rgba(0,204,68,0.3);border-radius:8px;padding:12px 16px;min-width:64px;}
+.count-num{font-size:clamp(22px,4vw,40px);font-weight:900;color:#00cc44;display:block;font-family:'Courier New',monospace;}
+.count-lbl{font-size:10px;color:#555;letter-spacing:2px;text-transform:uppercase;margin-top:2px;}
+.pk-line{font-size:clamp(13px,2.5vw,20px);color:#00cc44;letter-spacing:5px;font-weight:700;text-transform:uppercase;animation:pk-glow 1.2s ease-in-out infinite alternate;margin-bottom:6px;}
+.pk-flag-row{font-size:22px;letter-spacing:4px;margin-bottom:22px;}
+.url{font-size:13px;color:#444;letter-spacing:3px;margin-top:8px;}
+.url a{color:#00cc44;text-decoration:none;}
+.dots{display:flex;gap:8px;justify-content:center;margin-top:24px;}
+.dot{width:8px;height:8px;border-radius:50%;background:#00cc44;animation:dot-pulse 1.2s ease-in-out infinite;}
+.dot:nth-child(2){animation-delay:0.2s;}
+.dot:nth-child(3){animation-delay:0.4s;}
+@keyframes ring-pulse{0%,100%{box-shadow:0 0 0 0 rgba(0,204,68,0.4),0 0 20px rgba(0,204,68,0.2);}50%{box-shadow:0 0 0 12px rgba(0,204,68,0),0 0 40px rgba(0,204,68,0.4);}}
+@keyframes badge-glow{0%{box-shadow:0 0 5px #00cc44;}100%{box-shadow:0 0 20px #00cc44,0 0 40px rgba(0,204,68,0.3);}}
+@keyframes blink-green{0%,49%{opacity:1;}50%,100%{opacity:0.15;}}
+@keyframes pk-glow{0%{text-shadow:0 0 5px #00cc44;}100%{text-shadow:0 0 20px #00cc44,0 0 40px #00cc44;}}
+@keyframes dot-pulse{0%,80%,100%{transform:scale(0.6);opacity:0.4;}40%{transform:scale(1);opacity:1;}}
 </style>
 
-<div class="hk screen-fx" id="hkRoot">
-  <canvas id="rain"></canvas>
-  <div class="scanlines"></div>
-  <div class="vignette"></div>
-  <div class="content">
-
-    <div class="ghost-container">
-      <svg class="ghost-svg" viewBox="0 0 110 150" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <radialGradient id="gg" cx="50%" cy="35%" r="65%">
-            <stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>
-            <stop offset="55%" stop-color="#cccccc" stop-opacity="0.92"/>
-            <stop offset="100%" stop-color="#555" stop-opacity="0.75"/>
-          </radialGradient>
-          <filter id="gb"><feGaussianBlur stdDeviation="1.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-          <filter id="eg"><feGaussianBlur stdDeviation="4" result="g"/><feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-          <animateTransform/>
-        </defs>
-        <path d="M18,65 Q18,18 55,16 Q92,18 92,65 L92,122 Q83,110 74,122 Q65,110 55,122 Q45,110 36,122 Q27,110 18,122 Z" fill="url(#gg)" filter="url(#gb)" opacity="0.93"/>
-        <path d="M18,105 Q24,95 30,105 Q36,115 42,103 Q48,91 54,105 Q60,117 66,103 Q72,91 78,105 Q84,117 92,103 L92,122 Q83,110 74,122 Q65,110 55,122 Q45,110 36,122 Q27,110 18,122 Z" fill="#aaa" opacity="0.35"/>
-        <!-- Giant black hollow sockets -->
-        <ellipse cx="38" cy="62" rx="14" ry="17" fill="#000" opacity="1"/>
-        <ellipse cx="72" cy="62" rx="14" ry="17" fill="#000" opacity="1"/>
-        <!-- Pure white glowing eyes -->
-        <ellipse cx="38" cy="62" rx="9" ry="11" fill="#fff" filter="url(#eg)" opacity="1"/>
-        <ellipse cx="72" cy="62" rx="9" ry="11" fill="#fff" filter="url(#eg)" opacity="1"/>
-        <!-- Black pupils -->
-        <ellipse cx="38" cy="64" rx="4" ry="5" fill="#000"/>
-        <ellipse cx="72" cy="64" rx="4" ry="5" fill="#000"/>
-        <!-- tiny white dot -->
-        <ellipse cx="36" cy="61" rx="1.5" ry="2" fill="#fff" opacity="0.8"/>
-        <ellipse cx="70" cy="61" rx="1.5" ry="2" fill="#fff" opacity="0.8"/>
-        <!-- Screaming mouth -->
-        <ellipse cx="55" cy="92" rx="12" ry="16" fill="#000" opacity="1"/>
-        <ellipse cx="55" cy="92" rx="8" ry="11" fill="#111" opacity="0.9"/>
-        <!-- Teeth top -->
-        <rect x="48" y="82" width="5" height="7" rx="1" fill="#ddd"/>
-        <rect x="55" y="81" width="5" height="8" rx="1" fill="#ddd"/>
-        <rect x="62" y="82" width="4" height="7" rx="1" fill="#ddd"/>
-        <!-- Teeth bottom -->
-        <rect x="50" y="98" width="4" height="6" rx="1" fill="#ddd"/>
-        <rect x="57" y="99" width="4" height="6" rx="1" fill="#ddd"/>
-        <!-- Cracks -->
-        <path d="M44,28 L40,50 L47,58" fill="none" stroke="#888" stroke-width="1" opacity="0.7"/>
-        <path d="M68,32 L72,54" fill="none" stroke="#888" stroke-width="1" opacity="0.5"/>
-        <!-- Reaching hands -->
-        <path d="M12,74 Q0,68 0,58 Q2,51 8,55 Q4,45 12,47 Q10,37 18,41 L18,74Z" fill="url(#gg)" opacity="0.8"/>
-        <path d="M98,74 Q110,68 110,58 Q108,51 102,55 Q106,45 98,47 Q100,37 92,41 L92,74Z" fill="url(#gg)" opacity="0.8"/>
-        <!-- Ectoplasm drips -->
-        <ellipse cx="30" cy="124" rx="4" ry="7" fill="#ddd" opacity="0.45"/>
-        <ellipse cx="55" cy="128" rx="3" ry="9" fill="#ddd" opacity="0.4"/>
-        <ellipse cx="80" cy="123" rx="4" ry="6" fill="#ddd" opacity="0.45"/>
-        <!-- pulsing eye rings -->
-        <ellipse cx="38" cy="62" rx="12" ry="15" fill="none" stroke="#fff" stroke-width="1.5" opacity="0.6">
-          <animate attributeName="rx" values="12;16;12" dur="1.4s" repeatCount="indefinite"/>
-          <animate attributeName="ry" values="15;20;15" dur="1.4s" repeatCount="indefinite"/>
-          <animate attributeName="opacity" values="0.6;0;0.6" dur="1.4s" repeatCount="indefinite"/>
-        </ellipse>
-        <ellipse cx="72" cy="62" rx="12" ry="15" fill="none" stroke="#fff" stroke-width="1.5" opacity="0.6">
-          <animate attributeName="rx" values="12;16;12" dur="1.4s" begin="0.2s" repeatCount="indefinite"/>
-          <animate attributeName="ry" values="15;20;15" dur="1.4s" begin="0.2s" repeatCount="indefinite"/>
-          <animate attributeName="opacity" values="0.6;0;0.6" dur="1.4s" begin="0.2s" repeatCount="indefinite"/>
-        </ellipse>
-      </svg>
-    </div>
-
-    <div class="hk-title" id="mainTitle">YOU HAVE BEEN HACKED</div>
- <div class="hk-title" id="mainTitle">https://selium.vercel.app/</div>
-    <div class="hk-by">— by —</div>
-    <div class="blood-drips" id="drips"></div>
-    <div class="divider"></div>
-    <div class="brand">SELIUM DEVELOPMENT</div>
-    <div class="brand-sub">WE ARE EVERYWHERE &nbsp;•&nbsp; WE SEE YOU</div>
-    <div class="divider"></div>
-
-    <div class="terminal">
-      <div id="termLines"></div>
-      <span id="tprompt">root@selium:~# </span><span class="cursor"></span>
-    </div>
-
-    <div class="msgs">
-      <div class="msg-line">☠ YOUR SYSTEM IS OURS NOW ☠</div>
-      <div class="msg-line">☠ NO TRACE — NO ESCAPE — NO MERCY ☠</div>
-      <div class="msg-line">☠ SELIUM WAS HERE ☠</div>
-    </div>
-    <div class="footer">SELIUM DEV &nbsp;|&nbsp; ELITE UNIT &nbsp;|&nbsp; <span id="ts"></span></div>
+<canvas id="c"></canvas>
+<div class="wrap">
+  <div class="pk-badge">&#127477;&#127472; Pakistan on Top &#127477;&#127472;</div>
+  <div class="logo-ring"><div class="logo-inner">C3R</div></div>
+  <div class="title">CO3ER <span>DEV</span></div>
+  <div class="subtitle">Development Studio</div>
+  <div class="divider"></div>
+  <div class="coming-soon">Coming Soon</div>
+  <div class="countdown-row">
+    <div class="count-box"><span class="count-num" id="cd-d">00</span><div class="count-lbl">Days</div></div>
+    <div class="count-box"><span class="count-num" id="cd-h">00</span><div class="count-lbl">Hours</div></div>
+    <div class="count-box"><span class="count-num" id="cd-m">00</span><div class="count-lbl">Mins</div></div>
+    <div class="count-box"><span class="count-num" id="cd-s">00</span><div class="count-lbl">Secs</div></div>
   </div>
+  <div class="pk-line">&#9733; Pakistan Zindabad &#9733;</div>
+  <div class="pk-flag-row">&#127477;&#127472; &nbsp; &#127477;&#127472; &nbsp; &#127477;&#127472;</div>
+  <div class="url">Visit us at <a href="https://co3er.site">co3er.site</a></div>
+  <div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
 </div>
 
 <script>
-(function(){
-  const canvas=document.getElementById('rain');
-  const ctx=canvas.getContext('2d');
-  const root=document.getElementById('hkRoot');
-  function resize(){canvas.width=root.offsetWidth;canvas.height=root.offsetHeight;}
-  resize();window.addEventListener('resize',resize);
-  const chars='ァアイウエオ☠†01DEADSELIUM<>[]{}!@#GHOST';
-  const drops=Array(200).fill(0).map(()=>Math.random()*60);
-  let frame=0;
-  function rain(){
-    frame++;
-    const inv=frame%2===0;
-    ctx.fillStyle=inv?'rgba(255,255,255,0.07)':'rgba(0,0,0,0.07)';
-    ctx.fillRect(0,0,canvas.width,canvas.height);
-    const cols=Math.floor(canvas.width/16);
-    while(drops.length<cols)drops.push(0);
-    for(let i=0;i<cols;i++){
-      ctx.fillStyle=inv?'#000':'#fff';
-      ctx.font='13px monospace';
-      ctx.fillText(chars[Math.floor(Math.random()*chars.length)],i*16,drops[i]*16);
-      if(drops[i]*16>canvas.height&&Math.random()>0.97)drops[i]=0;
-      drops[i]++;
-    }
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
+resize();
+window.addEventListener('resize',resize);
+const cols=Math.floor(window.innerWidth/18);
+const drops=Array(cols).fill(1);
+const chars='01CO3ERPAKISTANZINDABAD010111';
+function draw(){
+  ctx.fillStyle='rgba(0,0,0,0.06)';
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  for(let i=0;i<drops.length;i++){
+    const ch=chars[Math.floor(Math.random()*chars.length)];
+    ctx.fillStyle=Math.random()>0.92?'#00ff55':'#004400';
+    ctx.font='14px monospace';
+    ctx.fillText(ch,i*18,drops[i]*18);
+    if(drops[i]*18>canvas.height&&Math.random()>0.975)drops[i]=0;
+    drops[i]++;
   }
-  setInterval(rain,40);
+}
+setInterval(draw,55);
 
-  const dripsEl=document.getElementById('drips');
-  for(let i=0;i<14;i++){
-    const d=document.createElement('div');
-    d.className='drip';
-    d.style.animationDelay=(Math.random()*2)+'s';
-    d.style.animationDuration=(1.3+Math.random()*1.6)+'s';
-    dripsEl.appendChild(d);
-  }
-
-  const lines=[
-    '[INIT] SELIUM breach sequence started...',
-    '[OK]   Firewall vaporized... ████ 100%',
-    '[OK]   Root obtained',
-    '[OK]   Ghost.selium injected',
-    '[OK]   All data exfiltrated',
-    '[!!!]  SELIUM DEVELOPMENT WAS HERE',
-  ];
-  const termLines=document.getElementById('termLines');
-  let li=0,ci=0,cur=null;
-  function type(){
-    if(li>=lines.length)return;
-    if(ci===0){
-      cur=document.createElement('div');
-      cur.style.marginBottom='3px';
-      cur.innerHTML='<span>root@selium:~# </span>';
-      termLines.appendChild(cur);
-    }
-    if(ci<lines[li].length){cur.innerHTML+=lines[li][ci];ci++;setTimeout(type,Math.random()*30+10);}
-    else{li++;ci=0;setTimeout(type,260);}
-  }
-  setTimeout(type,500);
-
-  const orig='YOU HAVE BEEN HACKED';
-  const el=document.getElementById('mainTitle');
-  const gc='!@☠†‡|/\\><[]{}01SELIUM';
-  setInterval(()=>{
-    if(Math.random()>0.7){
-      const a=orig.split('');
-      for(let i=0;i<Math.floor(Math.random()*5)+1;i++)
-        a[Math.floor(Math.random()*a.length)]=gc[Math.floor(Math.random()*gc.length)];
-      el.textContent=a.join('');
-      setTimeout(()=>{el.textContent=orig;},80);
-    }
-  },120);
-
-  function ts(){document.getElementById('ts').textContent=new Date().toISOString().replace('T',' ').slice(0,19)+' UTC';}
-  ts();setInterval(ts,1000);
-
-  setInterval(()=>{
-    if(Math.random()>0.9){
-      root.style.transform=`translate(${(Math.random()-.5)*8}px,${(Math.random()-.5)*6}px)`;
-      setTimeout(()=>{root.style.transform='';},55);
-    }
-  },300);
-})();
+const launch=new Date();
+launch.setDate(launch.getDate()+30);
+function tick(){
+  const now=new Date();
+  const diff=Math.max(0,launch-now);
+  const d=Math.floor(diff/86400000);
+  const h=Math.floor((diff%86400000)/3600000);
+  const m=Math.floor((diff%3600000)/60000);
+  const s=Math.floor((diff%60000)/1000);
+  document.getElementById('cd-d').textContent=String(d).padStart(2,'0');
+  document.getElementById('cd-h').textContent=String(h).padStart(2,'0');
+  document.getElementById('cd-m').textContent=String(m).padStart(2,'0');
+  document.getElementById('cd-s').textContent=String(s).padStart(2,'0');
+}
+tick();
+setInterval(tick,1000);
 </script>
