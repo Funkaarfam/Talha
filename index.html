@@ -1,352 +1,298 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Talha — VFX Artist & Video Editor</title>
-  <meta name="description" content="Talha is a VFX Artist and Video Editor crafting cinematic visual experiences." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
-</head>
-<body>
 
-  <!-- Cursor -->
-  <div class="cur-ring" id="curRing"></div>
-  <div class="cur-dot"  id="curDot"></div>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+.hk{
+  min-height:100vh;
+  font-family:'Courier New',monospace;
+  overflow:hidden;position:relative;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:2rem 1rem;
+  background:#000;
+  animation:bw-blink 0.18s step-end infinite;
+}
+@keyframes bw-blink{
+  0%{background:#000;color:#fff;filter:invert(0)}
+  25%{background:#fff;color:#000;filter:invert(1)}
+  50%{background:#000;color:#fff;filter:invert(0)}
+  75%{background:#111;color:#eee;filter:invert(0) contrast(2)}
+  100%{background:#000;color:#fff;filter:invert(0)}
+}
+canvas#rain{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;mix-blend-mode:difference}
+.scanlines{
+  position:absolute;top:0;left:0;width:100%;height:100%;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(255,255,255,0.06) 2px,rgba(255,255,255,0.06) 4px);
+  pointer-events:none;z-index:4;
+  animation:sl 0.1s linear infinite;
+}
+@keyframes sl{0%{background-position:0 0}100%{background-position:0 8px}}
+.vignette{
+  position:absolute;top:0;left:0;width:100%;height:100%;
+  background:radial-gradient(ellipse at center,transparent 25%,rgba(0,0,0,0.95) 100%);
+  pointer-events:none;z-index:3;
+  animation:vig-blink 0.18s step-end infinite;
+}
+@keyframes vig-blink{
+  0%,50%{background:radial-gradient(ellipse at center,transparent 25%,rgba(0,0,0,0.95) 100%)}
+  25%,75%{background:radial-gradient(ellipse at center,transparent 25%,rgba(255,255,255,0.6) 100%)}
+}
+.content{position:relative;z-index:10;text-align:center;width:100%;max-width:700px}
 
-  <!-- Grain -->
-  <canvas id="grain" class="grain-canvas" aria-hidden="true"></canvas>
+/* GHOST */
+.ghost-container{
+  position:relative;margin:0 auto 0.6rem;width:110px;height:150px;
+  animation:ghost-float 2.8s ease-in-out infinite;
+  filter:drop-shadow(0 0 20px rgba(255,255,255,0.8));
+}
+@keyframes ghost-float{
+  0%,100%{transform:translateY(0) rotate(-1.5deg)}
+  33%{transform:translateY(-16px) rotate(2deg)}
+  66%{transform:translateY(-7px) rotate(-2.5deg)}
+}
+.ghost-svg{width:110px;height:150px}
 
-  <!-- NAV -->
-  <nav class="nav" id="nav">
-    <a href="index.html" class="nav-logo">T<em>.</em></a>
-    <ul class="nav-links" role="list">
-      <li><a href="#work">Work</a></li>
-      <li><a href="#about">About</a></li>
-      <li><a href="#skills">Skills</a></li>
-      <li><a href="contact.html">Contact</a></li>
-    </ul>
-    <div class="nav-right">
-      <span class="nav-avail"><span class="avail-dot"></span>Available</span>
-      <button class="nav-menu-btn" id="menuBtn" aria-label="Menu" aria-expanded="false">
-        <span></span><span></span>
-      </button>
+.hk-title{
+  font-size:clamp(22px,5vw,46px);font-weight:900;
+  letter-spacing:0.1em;text-transform:uppercase;
+  animation:title-chaos 0.2s step-end infinite;
+  margin-bottom:0.3rem;
+}
+@keyframes title-chaos{
+  0%{color:#fff;text-shadow:0 0 10px #fff,0 0 30px #fff}
+  33%{color:#000;text-shadow:none}
+  66%{color:#fff;text-shadow:-4px 0 #0ff,4px 0 #f0f}
+  100%{color:#eee;text-shadow:0 0 20px #fff}
+}
+.hk-by{font-size:12px;letter-spacing:0.4em;text-transform:uppercase;margin-bottom:0.8rem;animation:inv 0.18s step-end infinite}
+@keyframes inv{0%,50%{color:#888}25%,75%{color:#777}}
+.divider{width:100%;height:1px;margin:0.7rem 0;animation:div-blink 0.18s step-end infinite}
+@keyframes div-blink{
+  0%,50%{background:linear-gradient(90deg,transparent,#fff,transparent)}
+  25%,75%{background:linear-gradient(90deg,transparent,#000,transparent)}
+}
+.brand{
+  font-size:clamp(20px,4.5vw,40px);font-weight:900;letter-spacing:0.18em;text-transform:uppercase;
+  animation:brand-chaos 0.18s step-end infinite;
+  margin:0.6rem 0 0.2rem;
+}
+@keyframes brand-chaos{
+  0%{color:#fff;text-shadow:0 0 15px #fff,0 0 50px #fff}
+  25%{color:#000;text-shadow:none}
+  50%{color:#fff;text-shadow:-3px 0 #0ff,3px 0 #f0f,0 0 30px #fff}
+  75%{color:#ccc;text-shadow:0 0 8px #fff}
+}
+.brand-sub{font-size:10px;letter-spacing:0.4em;text-transform:uppercase;margin-bottom:1rem;animation:inv 0.2s step-end infinite}
+.terminal{
+  background:#000;
+  border-animation:tb 0.18s step-end infinite;
+  border:1px solid #fff;
+  border-radius:3px;padding:0.8rem 1rem;text-align:left;
+  font-size:clamp(9px,1.4vw,11px);
+  margin:0.7rem 0;min-height:90px;
+  animation:term-blink 0.18s step-end infinite;
+}
+@keyframes term-blink{
+  0%,50%{background:#000;color:#ccc;border-color:#fff}
+  25%,75%{background:#fff;color:#000;border-color:#000}
+}
+.cursor{display:inline-block;width:7px;height:1em;animation:bc 0.7s step-end infinite;vertical-align:text-bottom;margin-left:1px}
+@keyframes bc{
+  0%,50%{background:#fff;opacity:1}
+  25%,75%{background:#000;opacity:1}
+  51%{opacity:0}100%{opacity:1}
+}
+.msgs{margin:0.8rem 0}
+.msg-line{
+  font-size:clamp(10px,1.7vw,12px);letter-spacing:0.08em;line-height:2.2;
+  animation:msg-blink 0.2s step-end infinite;
+}
+.msg-line:nth-child(2){animation-delay:.04s}.msg-line:nth-child(3){animation-delay:.08s}
+@keyframes msg-blink{
+  0%,50%{color:#fff;text-shadow:0 0 6px #fff}
+  25%,75%{color:#333;text-shadow:none}
+}
+.blood-drips{display:flex;justify-content:center;gap:6px;margin:0.4rem 0}
+.drip{width:5px;border-radius:0 0 8px 8px;animation:da 1.8s ease-in infinite}
+@keyframes da{
+  0%{height:3px;opacity:0;background:#fff}
+  20%{opacity:1}
+  50%{background:#000}
+  80%{height:30px;opacity:1}
+  100%{height:38px;opacity:0}
+}
+.footer{margin-top:1rem;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;animation:inv 0.2s step-end infinite}
+.screen-fx{animation:sfx 5s infinite}
+@keyframes sfx{0%,95%,100%{filter:none}96%{filter:invert(1) hue-rotate(90deg)}97%{filter:none}98%{filter:contrast(10)}99%{filter:none}}
+</style>
+
+<div class="hk screen-fx" id="hkRoot">
+  <canvas id="rain"></canvas>
+  <div class="scanlines"></div>
+  <div class="vignette"></div>
+  <div class="content">
+
+    <div class="ghost-container">
+      <svg class="ghost-svg" viewBox="0 0 110 150" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="gg" cx="50%" cy="35%" r="65%">
+            <stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>
+            <stop offset="55%" stop-color="#cccccc" stop-opacity="0.92"/>
+            <stop offset="100%" stop-color="#555" stop-opacity="0.75"/>
+          </radialGradient>
+          <filter id="gb"><feGaussianBlur stdDeviation="1.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <filter id="eg"><feGaussianBlur stdDeviation="4" result="g"/><feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <animateTransform/>
+        </defs>
+        <path d="M18,65 Q18,18 55,16 Q92,18 92,65 L92,122 Q83,110 74,122 Q65,110 55,122 Q45,110 36,122 Q27,110 18,122 Z" fill="url(#gg)" filter="url(#gb)" opacity="0.93"/>
+        <path d="M18,105 Q24,95 30,105 Q36,115 42,103 Q48,91 54,105 Q60,117 66,103 Q72,91 78,105 Q84,117 92,103 L92,122 Q83,110 74,122 Q65,110 55,122 Q45,110 36,122 Q27,110 18,122 Z" fill="#aaa" opacity="0.35"/>
+        <!-- Giant black hollow sockets -->
+        <ellipse cx="38" cy="62" rx="14" ry="17" fill="#000" opacity="1"/>
+        <ellipse cx="72" cy="62" rx="14" ry="17" fill="#000" opacity="1"/>
+        <!-- Pure white glowing eyes -->
+        <ellipse cx="38" cy="62" rx="9" ry="11" fill="#fff" filter="url(#eg)" opacity="1"/>
+        <ellipse cx="72" cy="62" rx="9" ry="11" fill="#fff" filter="url(#eg)" opacity="1"/>
+        <!-- Black pupils -->
+        <ellipse cx="38" cy="64" rx="4" ry="5" fill="#000"/>
+        <ellipse cx="72" cy="64" rx="4" ry="5" fill="#000"/>
+        <!-- tiny white dot -->
+        <ellipse cx="36" cy="61" rx="1.5" ry="2" fill="#fff" opacity="0.8"/>
+        <ellipse cx="70" cy="61" rx="1.5" ry="2" fill="#fff" opacity="0.8"/>
+        <!-- Screaming mouth -->
+        <ellipse cx="55" cy="92" rx="12" ry="16" fill="#000" opacity="1"/>
+        <ellipse cx="55" cy="92" rx="8" ry="11" fill="#111" opacity="0.9"/>
+        <!-- Teeth top -->
+        <rect x="48" y="82" width="5" height="7" rx="1" fill="#ddd"/>
+        <rect x="55" y="81" width="5" height="8" rx="1" fill="#ddd"/>
+        <rect x="62" y="82" width="4" height="7" rx="1" fill="#ddd"/>
+        <!-- Teeth bottom -->
+        <rect x="50" y="98" width="4" height="6" rx="1" fill="#ddd"/>
+        <rect x="57" y="99" width="4" height="6" rx="1" fill="#ddd"/>
+        <!-- Cracks -->
+        <path d="M44,28 L40,50 L47,58" fill="none" stroke="#888" stroke-width="1" opacity="0.7"/>
+        <path d="M68,32 L72,54" fill="none" stroke="#888" stroke-width="1" opacity="0.5"/>
+        <!-- Reaching hands -->
+        <path d="M12,74 Q0,68 0,58 Q2,51 8,55 Q4,45 12,47 Q10,37 18,41 L18,74Z" fill="url(#gg)" opacity="0.8"/>
+        <path d="M98,74 Q110,68 110,58 Q108,51 102,55 Q106,45 98,47 Q100,37 92,41 L92,74Z" fill="url(#gg)" opacity="0.8"/>
+        <!-- Ectoplasm drips -->
+        <ellipse cx="30" cy="124" rx="4" ry="7" fill="#ddd" opacity="0.45"/>
+        <ellipse cx="55" cy="128" rx="3" ry="9" fill="#ddd" opacity="0.4"/>
+        <ellipse cx="80" cy="123" rx="4" ry="6" fill="#ddd" opacity="0.45"/>
+        <!-- pulsing eye rings -->
+        <ellipse cx="38" cy="62" rx="12" ry="15" fill="none" stroke="#fff" stroke-width="1.5" opacity="0.6">
+          <animate attributeName="rx" values="12;16;12" dur="1.4s" repeatCount="indefinite"/>
+          <animate attributeName="ry" values="15;20;15" dur="1.4s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0.6;0;0.6" dur="1.4s" repeatCount="indefinite"/>
+        </ellipse>
+        <ellipse cx="72" cy="62" rx="12" ry="15" fill="none" stroke="#fff" stroke-width="1.5" opacity="0.6">
+          <animate attributeName="rx" values="12;16;12" dur="1.4s" begin="0.2s" repeatCount="indefinite"/>
+          <animate attributeName="ry" values="15;20;15" dur="1.4s" begin="0.2s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0.6;0;0.6" dur="1.4s" begin="0.2s" repeatCount="indefinite"/>
+        </ellipse>
+      </svg>
     </div>
-  </nav>
 
-  <!-- Mobile menu -->
-  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
-    <a href="#work"       class="mm-link">Work</a>
-    <a href="#about"      class="mm-link">About</a>
-    <a href="#skills"     class="mm-link">Skills</a>
-    <a href="contact.html" class="mm-link">Contact</a>
+    <div class="hk-title" id="mainTitle">YOU HAVE BEEN HACKED</div>
+ <div class="hk-title" id="mainTitle">https://selium.vercel.app/</div>
+    <div class="hk-by">— by —</div>
+    <div class="blood-drips" id="drips"></div>
+    <div class="divider"></div>
+    <div class="brand">SELIUM DEVELOPMENT</div>
+    <div class="brand-sub">WE ARE EVERYWHERE &nbsp;•&nbsp; WE SEE YOU</div>
+    <div class="divider"></div>
+
+    <div class="terminal">
+      <div id="termLines"></div>
+      <span id="tprompt">root@selium:~# </span><span class="cursor"></span>
+    </div>
+
+    <div class="msgs">
+      <div class="msg-line">☠ YOUR SYSTEM IS OURS NOW ☠</div>
+      <div class="msg-line">☠ NO TRACE — NO ESCAPE — NO MERCY ☠</div>
+      <div class="msg-line">☠ SELIUM WAS HERE ☠</div>
+    </div>
+    <div class="footer">SELIUM DEV &nbsp;|&nbsp; ELITE UNIT &nbsp;|&nbsp; <span id="ts"></span></div>
   </div>
+</div>
 
-  <!-- HERO -->
-  <section class="hero" id="hero">
-    <!-- Animated reel strips -->
-    <div class="reel" aria-hidden="true">
-      <div class="reel-track" id="reelTrack">
-        <div class="rf rf1"></div><div class="rf rf2"></div>
-        <div class="rf rf3"></div><div class="rf rf4"></div>
-        <div class="rf rf5"></div><div class="rf rf6"></div>
-        <div class="rf rf1"></div><div class="rf rf2"></div>
-      </div>
-    </div>
-    <div class="hero-vignette" aria-hidden="true"></div>
+<script>
+(function(){
+  const canvas=document.getElementById('rain');
+  const ctx=canvas.getContext('2d');
+  const root=document.getElementById('hkRoot');
+  function resize(){canvas.width=root.offsetWidth;canvas.height=root.offsetHeight;}
+  resize();window.addEventListener('resize',resize);
+  const chars='ァアイウエオ☠†01DEADSELIUM<>[]{}!@#GHOST';
+  const drops=Array(200).fill(0).map(()=>Math.random()*60);
+  let frame=0;
+  function rain(){
+    frame++;
+    const inv=frame%2===0;
+    ctx.fillStyle=inv?'rgba(255,255,255,0.07)':'rgba(0,0,0,0.07)';
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    const cols=Math.floor(canvas.width/16);
+    while(drops.length<cols)drops.push(0);
+    for(let i=0;i<cols;i++){
+      ctx.fillStyle=inv?'#000':'#fff';
+      ctx.font='13px monospace';
+      ctx.fillText(chars[Math.floor(Math.random()*chars.length)],i*16,drops[i]*16);
+      if(drops[i]*16>canvas.height&&Math.random()>0.97)drops[i]=0;
+      drops[i]++;
+    }
+  }
+  setInterval(rain,40);
 
-    <!-- HUD corners -->
-    <div class="hud hud-tl" aria-hidden="true">
-      <span class="hud-tag">VFX · EDITOR</span>
-    </div>
-    <div class="hud hud-tr" aria-hidden="true">
-      <span id="frameCount">001</span> / 008
-    </div>
-    <div class="hud hud-bl" aria-hidden="true">
-      <span class="hud-tag">EST. 2018</span>
-    </div>
-    <div class="hud hud-br" aria-hidden="true">
-      <span class="hud-status">● REC</span>
-    </div>
+  const dripsEl=document.getElementById('drips');
+  for(let i=0;i<14;i++){
+    const d=document.createElement('div');
+    d.className='drip';
+    d.style.animationDelay=(Math.random()*2)+'s';
+    d.style.animationDuration=(1.3+Math.random()*1.6)+'s';
+    dripsEl.appendChild(d);
+  }
 
-    <div class="hero-inner">
-      <p class="hero-eyebrow">
-        <span class="ey-line"></span>
-        VFX Artist &amp; Video Editor
-        <span class="ey-line"></span>
-      </p>
-      <h1 class="hero-title">
-        <span class="ht" data-delay="0">Crafting</span>
-        <span class="ht italic gold" data-delay="1">Cinematic</span>
-        <span class="ht" data-delay="2">Worlds</span>
-      </h1>
-      <p class="hero-sub">
-        Talha brings stories to life through visual effects,<br>
-        motion design, and precision post-production.
-      </p>
-      <div class="hero-btns">
-        <a href="#work" class="btn-p">View Showreel</a>
-        <a href="contact.html" class="btn-g">Get in Touch</a>
-      </div>
-    </div>
+  const lines=[
+    '[INIT] SELIUM breach sequence started...',
+    '[OK]   Firewall vaporized... ████ 100%',
+    '[OK]   Root obtained',
+    '[OK]   Ghost.selium injected',
+    '[OK]   All data exfiltrated',
+    '[!!!]  SELIUM DEVELOPMENT WAS HERE',
+  ];
+  const termLines=document.getElementById('termLines');
+  let li=0,ci=0,cur=null;
+  function type(){
+    if(li>=lines.length)return;
+    if(ci===0){
+      cur=document.createElement('div');
+      cur.style.marginBottom='3px';
+      cur.innerHTML='<span>root@selium:~# </span>';
+      termLines.appendChild(cur);
+    }
+    if(ci<lines[li].length){cur.innerHTML+=lines[li][ci];ci++;setTimeout(type,Math.random()*30+10);}
+    else{li++;ci=0;setTimeout(type,260);}
+  }
+  setTimeout(type,500);
 
-    <a href="#work" class="hero-scroll" aria-label="Scroll down">
-      <div class="scroll-mouse"><div class="scroll-whl"></div></div>
-      <span>Scroll</span>
-    </a>
-  </section>
+  const orig='YOU HAVE BEEN HACKED';
+  const el=document.getElementById('mainTitle');
+  const gc='!@☠†‡|/\\><[]{}01SELIUM';
+  setInterval(()=>{
+    if(Math.random()>0.7){
+      const a=orig.split('');
+      for(let i=0;i<Math.floor(Math.random()*5)+1;i++)
+        a[Math.floor(Math.random()*a.length)]=gc[Math.floor(Math.random()*gc.length)];
+      el.textContent=a.join('');
+      setTimeout(()=>{el.textContent=orig;},80);
+    }
+  },120);
 
-  <!-- MARQUEE -->
-  <div class="marquee" aria-hidden="true">
-    <div class="mq-track">
-      <span>Visual Effects</span><span class="mq-dot">✦</span>
-      <span>Color Grading</span><span class="mq-dot">✦</span>
-      <span>Motion Design</span><span class="mq-dot">✦</span>
-      <span>Compositing</span><span class="mq-dot">✦</span>
-      <span>3D Integration</span><span class="mq-dot">✦</span>
-      <span>Post Production</span><span class="mq-dot">✦</span>
-      <span>Visual Effects</span><span class="mq-dot">✦</span>
-      <span>Color Grading</span><span class="mq-dot">✦</span>
-      <span>Motion Design</span><span class="mq-dot">✦</span>
-      <span>Compositing</span><span class="mq-dot">✦</span>
-      <span>3D Integration</span><span class="mq-dot">✦</span>
-      <span>Post Production</span><span class="mq-dot">✦</span>
-    </div>
-  </div>
+  function ts(){document.getElementById('ts').textContent=new Date().toISOString().replace('T',' ').slice(0,19)+' UTC';}
+  ts();setInterval(ts,1000);
 
- <!-- WORK -->
-  <section class="work" id="work">
-    <div class="work-header">
-      <span class="work-header-num">02</span>
-      <h2>SELECTED WORK</h2>
-      <span class="work-header-count">04 Projects</span>
-    </div>
-    <div class="work-grid">
-      <article class="wi wi-large" data-reveal>
-        <div class="wi-visual wv1">
-          <video class="wi-bg-video" src="Project1.mp4" muted loop playsinline></video>
-          <div class="wi-num-bg" aria-hidden="true">01</div>
-          <span class="wi-category">Feature Film</span>
-          <button class="wi-play" onclick="openVideo('Project1.mp4')" aria-label="Play video"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></button>
-        </div>
-        <div class="wi-meta">
-          <span class="wi-num">01</span>
-          <div class="wi-text"><h3>Country Club</h3><p>Country Club Estate</p></div>
-          <div class="wi-tags"><span>VFX</span><span>Compositing</span><span>Film</span></div>
-        </div>
-      </article>
-      <article class="wi" data-reveal>
-        <div class="wi-visual wv2">
-          <video class="wi-bg-video" src="Project2.mp4" muted loop playsinline></video>
-          <div class="wi-num-bg" aria-hidden="true">02</div>
-          <span class="wi-category">Brand Video</span>
-          <button class="wi-play" onclick="openVideo('Project2.mp4')" aria-label="Play video"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></button>
-        </div>
-        <div class="wi-meta">
-          <span class="wi-num">02</span>
-          <div class="wi-text"><h3>Brand Video</h3><p>Hunger ends here</p></div>
-          <div class="wi-tags"><span>Motion</span><span>Brand</span></div>
-        </div>
-      </article>
-      <article class="wi" data-reveal>
-        <div class="wi-visual wv3">
-          <video class="wi-bg-video" src="Project3.mp4" muted loop playsinline></video>
-          <div class="wi-num-bg" aria-hidden="true">03</div>
-          <span class="wi-category">Brand Video</span>
-          <button class="wi-play" onclick="openVideo('project3.mp4')" aria-label="Play video"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></button>
-        </div>
-        <div class="wi-meta">
-          <span class="wi-num">03</span>
-          <div class="wi-text"><h3>Brand Video</h3><p>Sitara fashion film</p></div>
-          <div class="wi-tags"><span>VFX</span><span>Grade</span></div>
-        </div>
-      </article>
-      <article class="wi" data-reveal>
-        <div class="wi-visual wv4">
-          <video class="wi-bg-video" src="Project4.mp4" muted loop playsinline></video>
-          <div class="wi-num-bg" aria-hidden="true">04</div>
-          <span class="wi-category">VFX Edit</span>
-          <button class="wi-play" onclick="openVideo('project4.mp4')" aria-label="Play video"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></button>
-        </div>
-        <div class="wi-meta">
-          <span class="wi-num">04</span>
-          <div class="wi-text"><h3>VFX Edit</h3><p>Beyond the screen</p></div>
-          <div class="wi-tags"><span>Sci-Fi</span><span>Particles</span></div>
-        </div>
-      </article>
-    </div>
-  </section>
-
-
-  <!-- ABOUT -->
-  <section class="about" id="about">
-    <div class="about-grid">
-
-      <!-- Photo side -->
-      <div class="about-photo-col" data-reveal>
-        <div class="about-photo-wrap">
-          <!--
-            ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-            TO ADD YOUR PHOTO:
-            Replace the <div class="photo-placeholder"> below
-            with: <img src="talha.png" alt="Talha" class="about-photo" />
-            and add this to styles.css:
-            .about-photo { width:100%; height:100%; object-fit:cover; border-radius:2px; }
-            ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-          -->
-          <img src="talha.png" alt="Talha" class="about-photo" />
-
-          <!-- Floating stat badge -->
-          <div class="photo-badge">
-            <span class="pb-num">50+</span>
-            <span class="pb-label">Projects<br>Delivered</span>
-          </div>
-
-          <!-- Film grain strip on side -->
-          <div class="photo-strip" aria-hidden="true">
-            <div class="ps-hole"></div>
-            <div class="ps-hole"></div>
-            <div class="ps-hole"></div>
-            <div class="ps-hole"></div>
-            <div class="ps-hole"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Text side -->
-      <div class="about-text-col">
-        <div class="sec-label" data-reveal>
-          <span class="sl-num">03</span>
-          <span class="sl-line"></span>
-          <span>About</span>
-        </div>
-
-        <h2 class="about-h2" data-reveal>
-          Every frame<br><em>tells a story.</em>
-        </h2>
-
-        <p class="about-p" data-reveal>
-          I'm Talha — a VFX artist and video editor with a passion for creating visuals that make audiences forget they're watching pixels. From blockbuster-scale compositing to intimate brand storytelling, I bring technical precision and artistic intuition to every project.
-        </p>
-        <p class="about-p" data-reveal>
-          With over 6 years in post-production, I've collaborated with directors, studios, and brands across film, commercials, and music videos — always pushing the boundary between real and imagined.
-        </p>
-
-        <!-- Timeline -->
-        <div class="timeline" data-reveal>
-          <div class="tl-item">
-            <span class="tl-year">2018</span>
-            <div class="tl-dot"></div>
-            <p class="tl-text">Started in post-production</p>
-          </div>
-          <div class="tl-item">
-            <span class="tl-year">2020</span>
-            <div class="tl-dot"></div>
-            <p class="tl-text">First feature film credit</p>
-          </div>
-          <div class="tl-item">
-            <span class="tl-year">2022</span>
-            <div class="tl-dot"></div>
-            <p class="tl-text">Launched freelance studio</p>
-          </div>
-          <div class="tl-item">
-            <span class="tl-year">Now</span>
-            <div class="tl-dot tl-now"></div>
-            <p class="tl-text">50+ projects, 30+ clients</p>
-          </div>
-        </div>
-
-        <div class="about-stats" data-reveal>
-          <div class="astat"><span>6+</span><p>Years Experience</p></div>
-          <div class="astat"><span>50+</span><p>Projects</p></div>
-          <div class="astat"><span>30+</span><p>Happy Clients</p></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SKILLS -->
-  <section class="skills" id="skills">
-    <div class="sec-label" data-reveal>
-      <span class="sl-num">04</span>
-      <span class="sl-line"></span>
-      <span>Skills &amp; Tools</span>
-    </div>
-
-    <div class="skills-grid">
-      <div class="skill-col" data-reveal>
-        <h3 class="sk-head">Craft</h3>
-        <div class="sbars">
-          <div class="sbar"><div class="sb-row"><span>Visual Effects</span><span class="sb-pct">95%</span></div><div class="sb-track"><div class="sb-fill" data-w="95"></div></div></div>
-          <div class="sbar"><div class="sb-row"><span>Video Editing</span><span class="sb-pct">92%</span></div><div class="sb-track"><div class="sb-fill" data-w="92"></div></div></div>
-          <div class="sbar"><div class="sb-row"><span>Compositing</span><span class="sb-pct">90%</span></div><div class="sb-track"><div class="sb-fill" data-w="90"></div></div></div>
-          <div class="sbar"><div class="sb-row"><span>Color Grading</span><span class="sb-pct">88%</span></div><div class="sb-track"><div class="sb-fill" data-w="88"></div></div></div>
-          <div class="sbar"><div class="sb-row"><span>Motion Graphics</span><span class="sb-pct">85%</span></div><div class="sb-track"><div class="sb-fill" data-w="85"></div></div></div>
-          <div class="sbar"><div class="sb-row"><span>3D Integration</span><span class="sb-pct">78%</span></div><div class="sb-track"><div class="sb-fill" data-w="78"></div></div></div>
-        </div>
-      </div>
-
-      <div class="skill-col" data-reveal>
-        <h3 class="sk-head">Software</h3>
-        <div class="tools">
-          <div class="tool featured">After Effects</div>
-          <div class="tool">Premiere Pro</div>
-          <div class="tool featured">DaVinci Resolve</div>
-          <div class="tool">Nuke</div>
-          <div class="tool">Blender</div>
-          <div class="tool">Cinema 4D</div>
-          <div class="tool wide">Mocha Pro</div>
-          <div class="tool">Photoshop</div>
-          <div class="tool">Houdini</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CTA BAND -->
-  <div class="cta-band" data-reveal>
-    <p class="cta-band-text">Ready to create something <em>unforgettable?</em></p>
-    <a href="contact.html" class="btn-p">Start a Project</a>
-  </div>
-
-  <!-- FOOTER -->
-  <footer class="footer">
-    <div class="footer-top">
-      <div class="footer-logo">T<em>.</em></div>
-      <p class="footer-tagline">Making the impossible look <em>inevitable.</em></p>
-    </div>
-    <div class="footer-mid">
-      <div class="footer-col">
-        <p class="fc-label">Navigate</p>
-        <a href="#work">Work</a>
-        <a href="#about">About</a>
-        <a href="#skills">Skills</a>
-        <a href="contact.html">Contact</a>
-      </div>
-      <div class="footer-col">
-        <p class="fc-label">Connect</p>
-        <a href="#">Instagram</a>
-        <a href="#">Vimeo</a>
-        <a href="#">LinkedIn</a>
-        <a href="#">Behance</a>
-      </div>
-      <div class="footer-col">
-        <p class="fc-label">Get in touch</p>
-        <a href="mailto:Talhaavaan@gmail.com" class="footer-email">Talhaavaan@gmail.com</a>
-        <a href="contact.html" class="btn-p sm">Start a Project</a>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>© 2026 Talha. All rights reserved.</span>
-      <span>VFX Artist &amp; Video Editor</span>
-    </div>
-    <div class="footer-dev">
-      Developed by <a href="https://co3er.site" target="_blank" rel="noopener">Co3er Development</a>
-    </div>
-  </footer>
-
-  <script src="main.js"></script>
-</body>
-</html>
+  setInterval(()=>{
+    if(Math.random()>0.9){
+      root.style.transform=`translate(${(Math.random()-.5)*8}px,${(Math.random()-.5)*6}px)`;
+      setTimeout(()=>{root.style.transform='';},55);
+    }
+  },300);
+})();
+</script>
