@@ -3,383 +3,468 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Talha — VFX Artist & Video Editor</title>
-  <meta name="description" content="Talha is a VFX Artist and Video Editor crafting cinematic visual experiences." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+  <title>Coming Soon</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         #ffffff;
+      --fg:         #0a0a0a;
+      --primary:    #0a0a0a;
+      --primary-fg: #ffffff;
+      --muted:      #f4f4f5;
+      --muted-fg:   #71717a;
+      --border:     #e4e4e7;
+      --card:       #ffffff;
+      --destructive:#dc2626;
+      --ring:       rgba(10,10,10,0.3);
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      overflow-x: hidden;
+    }
+
+    /* ── Canvas confetti ── */
+    #confetti-canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    /* ── Main container ── */
+    .container {
+      width: 100%;
+      max-width: 900px;
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .container.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── Stagger children ── */
+    .stagger { opacity: 0; transform: translateY(20px); }
+    .stagger.show {
+      animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+    .stagger:nth-child(1) { animation-delay: 0s; }
+    .stagger:nth-child(2) { animation-delay: 0.15s; }
+    .stagger:nth-child(3) { animation-delay: 0.3s; }
+    .stagger:nth-child(4) { animation-delay: 0.45s; }
+    .stagger:nth-child(5) { animation-delay: 0.6s; }
+    .stagger:nth-child(6) { animation-delay: 0.75s; }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Badge ── */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.45rem 1rem;
+      background: rgba(10,10,10,0.08);
+      color: var(--primary);
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+    }
+    .badge svg { width: 15px; height: 15px; flex-shrink: 0; }
+
+    /* ── Heading ── */
+    .hero-title {
+      font-size: clamp(3rem, 10vw, 7rem);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      color: var(--fg);
+      margin-bottom: 1rem;
+    }
+
+    .hero-sub {
+      font-size: clamp(1.1rem, 3vw, 1.7rem);
+      color: var(--muted-fg);
+      margin-bottom: 0.75rem;
+      font-weight: 400;
+    }
+
+    .hero-date {
+      font-size: 1rem;
+      color: rgba(113,113,122,0.7);
+      font-style: italic;
+      margin-bottom: 3rem;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.75rem;
+      width: 100%;
+      max-width: 440px;
+      margin: 0 auto;
+    }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--fg);
+      margin-bottom: 0.2rem;
+    }
+
+    .card-desc {
+      font-size: 0.84rem;
+      color: var(--muted-fg);
+      margin-bottom: 1.25rem;
+    }
+
+    /* ── Form ── */
+    .form-row {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .form-input {
+      flex: 1;
+      padding: 0.55rem 0.85rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      font-size: 0.9rem;
+      color: var(--fg);
+      font-family: inherit;
+      outline: none;
+      transition: box-shadow 0.2s, border-color 0.2s;
+    }
+    .form-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--ring);
+    }
+    .form-input::placeholder { color: rgba(113,113,122,0.5); }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.55rem 1.1rem;
+      background: var(--primary);
+      color: var(--primary-fg);
+      border: none;
+      border-radius: 7px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s;
+      white-space: nowrap;
+    }
+    .btn-primary:hover { opacity: 0.88; }
+    .btn-primary:active { transform: scale(0.97); }
+    .btn-primary:disabled { opacity: 0.45; cursor: not-allowed; }
+    .btn-primary svg { width: 15px; height: 15px; }
+
+    .error-msg {
+      font-size: 0.8rem;
+      color: var(--destructive);
+      margin-top: 0.5rem;
+      min-height: 1.1em;
+      display: none;
+    }
+    .error-msg.show { display: block; }
+
+    /* ── Success state ── */
+    .success-state {
+      display: none;
+      text-align: center;
+      padding: 1rem 0;
+    }
+    .success-state.show { display: block; }
+    .success-icon {
+      width: 64px; height: 64px;
+      background: rgba(10,10,10,0.07);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+    }
+    .success-icon svg { width: 30px; height: 30px; }
+    .success-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.35rem; }
+    .success-sub { font-size: 0.84rem; color: var(--muted-fg); }
+
+    /* ── Socials ── */
+    .socials-label {
+      font-size: 0.8rem;
+      color: var(--muted-fg);
+      margin-bottom: 0.85rem;
+    }
+    .socials-row {
+      display: flex;
+      justify-content: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+    .social-btn {
+      padding: 0.5rem 1.1rem;
+      background: var(--muted);
+      color: var(--fg);
+      border: none;
+      border-radius: 7px;
+      font-size: 0.84rem;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+    .social-btn:hover { background: #e4e4e7; }
+    .social-btn:active { transform: scale(0.95); }
+
+    /* ── Spinner ── */
+    .spinner {
+      width: 15px; height: 15px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.65s linear infinite;
+      display: none;
+    }
+    .btn-primary.loading .spinner { display: block; }
+    .btn-primary.loading .btn-label { display: none; }
+    .btn-primary.loading .btn-icon { display: none; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Responsive ── */
+    @media (max-width: 480px) {
+      .form-row { flex-direction: column; }
+      .btn-primary { width: 100%; }
+    }
+  </style>
 </head>
 <body>
 
-  <!-- Announcement Banner -->
-  <div class="announce-bar" id="announceBar" role="alert">
-    <span class="announce-dot"></span>
-    <span class="announce-text">
-      <em>Maintenance Notice</em> — Co3er.site is currently undergoing scheduled maintenance.
-      Some features may be temporarily unavailable.
-      <a href="https://co3er.site" target="_blank" rel="noopener" class="announce-link">Status &rarr;</a>
-    </span>
-    <button class="announce-close" id="announceClose" aria-label="Dismiss notice">
-      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
-        <line x1="1" y1="1" x2="11" y2="11"/><line x1="11" y1="1" x2="1" y2="11"/>
-      </svg>
-    </button>
-  </div>
+<canvas id="confetti-canvas"></canvas>
 
-  <!-- Cursor -->
-  <div class="cur-ring" id="curRing"></div>
-  <div class="cur-dot"  id="curDot"></div>
+<div class="container" id="main">
+  <div style="text-align:center; margin-bottom: 3rem;">
 
-  <!-- Grain -->
-  <canvas id="grain" class="grain-canvas" aria-hidden="true"></canvas>
-
-  <!-- NAV -->
-  <nav class="nav" id="nav">
-    <a href="index.html" class="nav-logo">T<em>.</em></a>
-    <ul class="nav-links" role="list">
-      <li><a href="#work">Work</a></li>
-      <li><a href="#about">About</a></li>
-      <li><a href="#skills">Skills</a></li>
-      <li><a href="contact.html">Contact</a></li>
-    </ul>
-    <div class="nav-right">
-      <span class="nav-avail"><span class="avail-dot"></span>Available</span>
-      <button class="nav-menu-btn" id="menuBtn" aria-label="Menu" aria-expanded="false">
-        <span></span><span></span>
-      </button>
-    </div>
-  </nav>
-
-  <!-- Mobile menu -->
-  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
-    <a href="#work"       class="mm-link">Work</a>
-    <a href="#about"      class="mm-link">About</a>
-    <a href="#skills"     class="mm-link">Skills</a>
-    <a href="contact.html" class="mm-link">Contact</a>
-  </div>
-
-  <!-- HERO -->
-  <section class="hero" id="hero">
-    <!-- Animated reel strips -->
-    <div class="reel" aria-hidden="true">
-      <div class="reel-track" id="reelTrack">
-        <div class="rf rf1"></div><div class="rf rf2"></div>
-        <div class="rf rf3"></div><div class="rf rf4"></div>
-        <div class="rf rf5"></div><div class="rf rf6"></div>
-        <div class="rf rf1"></div><div class="rf rf2"></div>
-      </div>
-    </div>
-    <div class="hero-vignette" aria-hidden="true"></div>
-
-    <!-- HUD corners -->
-    <div class="hud hud-tl" aria-hidden="true">
-      <span class="hud-tag">VFX · EDITOR</span>
-    </div>
-    <div class="hud hud-tr" aria-hidden="true">
-      <span id="frameCount">001</span> / 008
-    </div>
-    <div class="hud hud-bl" aria-hidden="true">
-      <span class="hud-tag">EST. 2018</span>
-    </div>
-    <div class="hud hud-br" aria-hidden="true">
-      <span class="hud-status">● REC</span>
-    </div>
-
-    <div class="hero-inner">
-      <p class="hero-eyebrow">
-        <span class="ey-line"></span>
-        VFX Artist &amp; Video Editor
-        <span class="ey-line"></span>
-      </p>
-      <h1 class="hero-title">
-        <span class="ht" data-delay="0">Crafting</span>
-        <span class="ht italic gold" data-delay="1">Cinematic</span>
-        <span class="ht" data-delay="2">Worlds</span>
-      </h1>
-      <p class="hero-sub">
-        Talha brings stories to life through visual effects,<br>
-        motion design, and precision post-production.
-      </p>
-      <div class="hero-btns">
-        <a href="#work" class="btn-p">View Showreel</a>
-        <a href="contact.html" class="btn-g">Get in Touch</a>
+    <!-- Badge -->
+    <div class="stagger">
+      <div class="badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+          <line x1="16" y1="2" x2="16" y2="6"/>
+          <line x1="8" y1="2" x2="8" y2="6"/>
+          <line x1="3" y1="10" x2="21" y2="10"/>
+        </svg>
+        Launching Soon
       </div>
     </div>
 
-    <a href="#work" class="hero-scroll" aria-label="Scroll down">
-      <div class="scroll-mouse"><div class="scroll-whl"></div></div>
-      <span>Scroll</span>
-    </a>
-  </section>
+    <!-- Heading -->
+    <div class="stagger">
+      <h1 class="hero-title">Coming Soon</h1>
+    </div>
 
-  <!-- MARQUEE -->
-  <div class="marquee" aria-hidden="true">
-    <div class="mq-track">
-      <span>Visual Effects</span><span class="mq-dot">✦</span>
-      <span>Color Grading</span><span class="mq-dot">✦</span>
-      <span>Motion Design</span><span class="mq-dot">✦</span>
-      <span>Compositing</span><span class="mq-dot">✦</span>
-      <span>3D Integration</span><span class="mq-dot">✦</span>
-      <span>Post Production</span><span class="mq-dot">✦</span>
-      <span>Visual Effects</span><span class="mq-dot">✦</span>
-      <span>Color Grading</span><span class="mq-dot">✦</span>
-      <span>Motion Design</span><span class="mq-dot">✦</span>
-      <span>Compositing</span><span class="mq-dot">✦</span>
-      <span>3D Integration</span><span class="mq-dot">✦</span>
-      <span>Post Production</span><span class="mq-dot">✦</span>
+    <!-- Subheading -->
+    <div class="stagger">
+      <p class="hero-sub">Something amazing is on the way</p>
+    </div>
+
+    <!-- Date -->
+    <div class="stagger">
+      <p class="hero-date">Expected Launch: Summer 2025</p>
     </div>
   </div>
 
- <!-- WORK -->
-  <section class="work" id="work">
-    <div class="work-header">
-      <span class="work-header-num">02</span>
-      <h2>SELECTED WORK</h2>
-      <span class="work-header-count">04 Projects</span>
-    </div>
-    <div class="work-grid">
-      <article class="wi wi-large" data-reveal>
-        <div class="wi-visual wv1">
-          <video class="wi-bg-video" src="Project1.mp4" muted loop playsinline></video>
-          <div class="wi-num-bg" aria-hidden="true">01</div>
-          <span class="wi-category">Feature Film</span>
-          <button class="wi-play" onclick="openVideo('Project1.mp4')" aria-label="Play video"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></button>
-        </div>
-        <div class="wi-meta">
-          <span class="wi-num">01</span>
-          <div class="wi-text"><h3>Country Club</h3><p>Country Club Estate</p></div>
-          <div class="wi-tags"><span>VFX</span><span>Compositing</span><span>Film</span></div>
-        </div>
-      </article>
-      <article class="wi" data-reveal>
-        <div class="wi-visual wv2">
-          <video class="wi-bg-video" src="Project2.mp4" muted loop playsinline></video>
-          <div class="wi-num-bg" aria-hidden="true">02</div>
-          <span class="wi-category">Brand Video</span>
-          <button class="wi-play" onclick="openVideo('Project2.mp4')" aria-label="Play video"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></button>
-        </div>
-        <div class="wi-meta">
-          <span class="wi-num">02</span>
-          <div class="wi-text"><h3>Brand Video</h3><p>Hunger ends here</p></div>
-          <div class="wi-tags"><span>Motion</span><span>Brand</span></div>
-        </div>
-      </article>
-      <article class="wi" data-reveal>
-        <div class="wi-visual wv3">
-          <video class="wi-bg-video" src="Project3.mp4" muted loop playsinline></video>
-          <div class="wi-num-bg" aria-hidden="true">03</div>
-          <span class="wi-category">Brand Video</span>
-          <button class="wi-play" onclick="openVideo('Project3.mp4')" aria-label="Play video"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></button>
-        </div>
-        <div class="wi-meta">
-          <span class="wi-num">03</span>
-          <div class="wi-text"><h3>Brand Video</h3><p>Sitara fashion film</p></div>
-          <div class="wi-tags"><span>VFX</span><span>Grade</span></div>
-        </div>
-      </article>
-      <article class="wi" data-reveal>
-        <div class="wi-visual wv4">
-          <video class="wi-bg-video" src="Project4.mp4" muted loop playsinline></video>
-          <div class="wi-num-bg" aria-hidden="true">04</div>
-          <span class="wi-category">VFX Edit</span>
-          <button class="wi-play" onclick="openVideo('Project4.mp4')" aria-label="Play video"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></button>
-        </div>
-        <div class="wi-meta">
-          <span class="wi-num">04</span>
-          <div class="wi-text"><h3>VFX Edit</h3><p>Beyond the screen</p></div>
-          <div class="wi-tags"><span>Sci-Fi</span><span>Particles</span></div>
-        </div>
-      </article>
-    </div>
-  </section>
+  <!-- Newsletter card -->
+  <div class="stagger" style="display:flex; justify-content:center; margin-bottom:4rem;">
+    <div class="card">
 
-
-  <!-- ABOUT -->
-  <section class="about" id="about">
-    <div class="about-grid">
-
-      <!-- Photo side -->
-      <div class="about-photo-col" data-reveal>
-        <div class="about-photo-wrap">
-          <!--
-            ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-            TO ADD YOUR PHOTO:
-            Replace the <div class="photo-placeholder"> below
-            with: <img src="talha.png" alt="Talha" class="about-photo" />
-            and add this to styles.css:
-            .about-photo { width:100%; height:100%; object-fit:cover; border-radius:2px; }
-            ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-          -->
-          <img src="talha.png" alt="Talha" class="about-photo" />
-
-          <!-- Floating stat badge -->
-          <div class="photo-badge">
-            <span class="pb-num">50+</span>
-            <span class="pb-label">Projects<br>Delivered</span>
+      <!-- Form state -->
+      <div id="form-state">
+        <p class="card-title">Get notified when we launch</p>
+        <p class="card-desc">Be the first to know when we go live.</p>
+        <form id="newsletter-form" onsubmit="handleSubmit(event)">
+          <div class="form-row">
+            <input
+              class="form-input"
+              type="email"
+              id="email-input"
+              placeholder="you@example.com"
+              autocomplete="email"
+            />
+            <button class="btn-primary" type="submit" id="submit-btn">
+              <span class="spinner"></span>
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"/>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+              </svg>
+              <span class="btn-label">Subscribe</span>
+            </button>
           </div>
-
-          <!-- Film grain strip on side -->
-          <div class="photo-strip" aria-hidden="true">
-            <div class="ps-hole"></div>
-            <div class="ps-hole"></div>
-            <div class="ps-hole"></div>
-            <div class="ps-hole"></div>
-            <div class="ps-hole"></div>
-          </div>
-        </div>
+          <p class="error-msg" id="error-msg"></p>
+        </form>
       </div>
 
-      <!-- Text side -->
-      <div class="about-text-col">
-        <div class="sec-label" data-reveal>
-          <span class="sl-num">03</span>
-          <span class="sl-line"></span>
-          <span>About</span>
+      <!-- Success state -->
+      <div class="success-state" id="success-state">
+        <div class="success-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
+          </svg>
         </div>
-
-        <h2 class="about-h2" data-reveal>
-          Every frame<br><em>tells a story.</em>
-        </h2>
-
-        <p class="about-p" data-reveal>
-          I'm Talha — a VFX artist and video editor with a passion for creating visuals that make audiences forget they're watching pixels. From blockbuster-scale compositing to intimate brand storytelling, I bring technical precision and artistic intuition to every project.
-        </p>
-        <p class="about-p" data-reveal>
-          With over 6 years in post-production, I've collaborated with directors, studios, and brands across film, commercials, and music videos — always pushing the boundary between real and imagined.
-        </p>
-
-        <!-- Timeline -->
-        <div class="timeline" data-reveal>
-          <div class="tl-item">
-            <span class="tl-year">2018</span>
-            <div class="tl-dot"></div>
-            <p class="tl-text">Started in post-production</p>
-          </div>
-          <div class="tl-item">
-            <span class="tl-year">2020</span>
-            <div class="tl-dot"></div>
-            <p class="tl-text">First feature film credit</p>
-          </div>
-          <div class="tl-item">
-            <span class="tl-year">2022</span>
-            <div class="tl-dot"></div>
-            <p class="tl-text">Launched freelance studio</p>
-          </div>
-          <div class="tl-item">
-            <span class="tl-year">Now</span>
-            <div class="tl-dot tl-now"></div>
-            <p class="tl-text">50+ projects, 30+ clients</p>
-          </div>
-        </div>
-
-        <div class="about-stats" data-reveal>
-          <div class="astat"><span>6+</span><p>Years Experience</p></div>
-          <div class="astat"><span>50+</span><p>Projects</p></div>
-          <div class="astat"><span>30+</span><p>Happy Clients</p></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SKILLS -->
-  <section class="skills" id="skills">
-    <div class="sec-label" data-reveal>
-      <span class="sl-num">04</span>
-      <span class="sl-line"></span>
-      <span>Skills &amp; Tools</span>
-    </div>
-
-    <div class="skills-grid">
-      <div class="skill-col" data-reveal>
-        <h3 class="sk-head">Craft</h3>
-        <div class="sbars">
-          <div class="sbar"><div class="sb-row"><span>Visual Effects</span><span class="sb-pct">95%</span></div><div class="sb-track"><div class="sb-fill" data-w="95"></div></div></div>
-          <div class="sbar"><div class="sb-row"><span>Video Editing</span><span class="sb-pct">92%</span></div><div class="sb-track"><div class="sb-fill" data-w="92"></div></div></div>
-          <div class="sbar"><div class="sb-row"><span>Compositing</span><span class="sb-pct">90%</span></div><div class="sb-track"><div class="sb-fill" data-w="90"></div></div></div>
-          <div class="sbar"><div class="sb-row"><span>Color Grading</span><span class="sb-pct">88%</span></div><div class="sb-track"><div class="sb-fill" data-w="88"></div></div></div>
-          <div class="sbar"><div class="sb-row"><span>Motion Graphics</span><span class="sb-pct">85%</span></div><div class="sb-track"><div class="sb-fill" data-w="85"></div></div></div>
-          <div class="sbar"><div class="sb-row"><span>3D Integration</span><span class="sb-pct">78%</span></div><div class="sb-track"><div class="sb-fill" data-w="78"></div></div></div>
-        </div>
+        <p class="success-title">Thank you for subscribing!</p>
+        <p class="success-sub">We'll notify you when we launch.</p>
       </div>
 
-      <div class="skill-col" data-reveal>
-        <h3 class="sk-head">Software</h3>
-        <div class="tools">
-          <div class="tool featured">After Effects</div>
-          <div class="tool">Premiere Pro</div>
-          <div class="tool featured">DaVinci Resolve</div>
-          <div class="tool">Nuke</div>
-          <div class="tool">Blender</div>
-          <div class="tool">Cinema 4D</div>
-          <div class="tool wide">Mocha Pro</div>
-          <div class="tool">Photoshop</div>
-          <div class="tool">Houdini</div>
-        </div>
-      </div>
     </div>
-  </section>
-
-  <!-- CTA BAND -->
-  <div class="cta-band" data-reveal>
-    <p class="cta-band-text">Ready to create something <em>unforgettable?</em></p>
-    <a href="contact.html" class="btn-p">Start a Project</a>
   </div>
 
-  <!-- FOOTER -->
-  <footer class="footer">
-    <div class="footer-top">
-      <div class="footer-logo">T<em>.</em></div>
-      <p class="footer-tagline">Making the impossible look <em>inevitable.</em></p>
+  <!-- Socials -->
+  <div class="stagger" style="text-align:center;">
+    <p class="socials-label">Follow us for updates</p>
+    <div class="socials-row">
+      <a href="#" class="social-btn">Twitter</a>
+      <a href="#" class="social-btn">Instagram</a>
+      <a href="#" class="social-btn">LinkedIn</a>
     </div>
-    <div class="footer-mid">
-      <div class="footer-col">
-        <p class="fc-label">Navigate</p>
-        <a href="#work">Work</a>
-        <a href="#about">About</a>
-        <a href="#skills">Skills</a>
-        <a href="contact.html">Contact</a>
-      </div>
-      <div class="footer-col">
-        <p class="fc-label">Connect</p>
-        <a href="#">Instagram</a>
-        <a href="#">Vimeo</a>
-        <a href="#">LinkedIn</a>
-        <a href="#">Behance</a>
-      </div>
-      <div class="footer-col">
-        <p class="fc-label">Get in touch</p>
-        <a href="mailto:Talhaavaan@gmail.com" class="footer-email">Talhaavaan@gmail.com</a>
-        <a href="contact.html" class="btn-p sm">Start a Project</a>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>© 2026 Talha. All rights reserved.</span>
-      <span>VFX Artist &amp; Video Editor</span>
-    </div>
-    <div class="footer-dev">
-      Developed by <a href="https://co3er.site" target="_blank" rel="noopener">Co3er Development</a>
-    </div>
-  </footer>
+  </div>
+</div>
 
-  <script src="main.js"></script>
-  <script>
-    // Announcement banner dismiss
-    (function() {
-      var bar = document.getElementById('announceBar');
-      var btn = document.getElementById('announceClose');
-      if (!bar || !btn) return;
-      if (!sessionStorage.getItem('announceDismissed')) {
-        document.body.classList.add('has-announce');
-      } else {
-        bar.classList.add('hidden');
-      }
-      btn.addEventListener('click', function() {
-        bar.classList.add('hidden');
-        document.body.classList.remove('has-announce');
-        sessionStorage.setItem('announceDismissed', '1');
+<script>
+  /* ── Entrance animation ── */
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      document.getElementById('main').classList.add('visible');
+      document.querySelectorAll('.stagger').forEach(el => el.classList.add('show'));
+    }, 200);
+  });
+
+  /* ── Form submission ── */
+  async function handleSubmit(e) {
+    e.preventDefault();
+    const emailInput = document.getElementById('email-input');
+    const errorMsg   = document.getElementById('error-msg');
+    const submitBtn  = document.getElementById('submit-btn');
+    const email = emailInput.value.trim();
+
+    // Reset error
+    errorMsg.textContent = '';
+    errorMsg.classList.remove('show');
+
+    // Validate
+    if (!email) {
+      showError('Email is required');
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      showError('Please enter a valid email address');
+      return;
+    }
+
+    // Submit
+    submitBtn.disabled = true;
+    submitBtn.classList.add('loading');
+
+    try {
+      await new Promise(r => setTimeout(r, 1000)); // simulate API
+      console.log('Subscribed:', email);
+      showSuccess();
+      launchConfetti();
+    } catch {
+      showError('An error occurred. Please try again.');
+      submitBtn.disabled = false;
+      submitBtn.classList.remove('loading');
+    }
+  }
+
+  function showError(msg) {
+    const el = document.getElementById('error-msg');
+    el.textContent = msg;
+    el.classList.add('show');
+  }
+
+  function showSuccess() {
+    document.getElementById('form-state').style.display = 'none';
+    const s = document.getElementById('success-state');
+    s.classList.add('show');
+    s.style.animation = 'fadeUp 0.5s ease forwards';
+  }
+
+  /* ── Confetti ── */
+  function launchConfetti() {
+    const canvas = document.getElementById('confetti-canvas');
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const ctx = canvas.getContext('2d');
+    const pieces = [];
+    const colors = ['#0a0a0a','#71717a','#a1a1aa','#d4d4d8','#f4f4f5','#e4e4e7'];
+
+    for (let i = 0; i < 120; i++) {
+      pieces.push({
+        x: Math.random() * canvas.width,
+        y: canvas.height * 0.55 + Math.random() * 80 - 40,
+        vx: (Math.random() - 0.5) * 8,
+        vy: -(Math.random() * 10 + 5),
+        r: Math.random() * 6 + 3,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        rot: Math.random() * Math.PI * 2,
+        rotV: (Math.random() - 0.5) * 0.2,
+        shape: Math.random() > 0.5 ? 'rect' : 'circle',
+        w: Math.random() * 10 + 5,
+        h: Math.random() * 6 + 3,
       });
-    })();
-  </script>
+    }
+
+    let frame = 0;
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      pieces.forEach(p => {
+        p.x  += p.vx;
+        p.y  += p.vy;
+        p.vy += 0.25;
+        p.vx *= 0.99;
+        p.rot += p.rotV;
+
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot);
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = Math.max(0, 1 - frame / 120);
+
+        if (p.shape === 'circle') {
+          ctx.beginPath();
+          ctx.arc(0, 0, p.r, 0, Math.PI * 2);
+          ctx.fill();
+        } else {
+          ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+        }
+        ctx.restore();
+      });
+
+      frame++;
+      if (frame < 140) requestAnimationFrame(draw);
+      else ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+    draw();
+  }
+</script>
 </body>
 </html>
