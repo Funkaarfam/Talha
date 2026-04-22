@@ -1,93 +1,352 @@
-<style>
-*{margin:0;padding:0;box-sizing:border-box;}
-body{background:#000;color:#fff;font-family:'Courier New',monospace;min-height:100vh;overflow:hidden;}
-.wrap{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 20px;position:relative;z-index:2;}
-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;}
-.logo-ring{width:120px;height:120px;border-radius:50%;border:3px solid #00cc44;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;animation:ring-pulse 2s ease-in-out infinite;position:relative;}
-.logo-ring::before{content:'';position:absolute;inset:-8px;border-radius:50%;border:1px solid rgba(0,204,68,0.3);animation:ring-pulse 2s ease-in-out infinite 0.5s;}
-.logo-inner{font-size:32px;font-weight:900;color:#00cc44;letter-spacing:2px;text-shadow:0 0 20px #00cc44;}
-.pk-badge{background:#006400;color:#ffffff;font-size:13px;font-weight:700;letter-spacing:3px;padding:6px 20px;border-radius:4px;margin-bottom:20px;border:1px solid #00cc44;text-transform:uppercase;animation:badge-glow 1.5s ease-in-out infinite alternate;}
-.title{font-size:clamp(28px,6vw,64px);font-weight:900;color:#ffffff;letter-spacing:6px;text-transform:uppercase;margin-bottom:6px;line-height:1.1;}
-.title span{color:#00cc44;}
-.subtitle{font-size:clamp(13px,2.5vw,20px);color:#888;letter-spacing:4px;text-transform:uppercase;margin-bottom:32px;}
-.divider{width:200px;height:1px;background:#00cc44;margin:0 auto 28px;opacity:0.6;}
-.coming-soon{font-size:clamp(16px,3.5vw,36px);font-weight:900;color:#00cc44;letter-spacing:8px;text-transform:uppercase;animation:blink-green 1s infinite;margin-bottom:28px;text-shadow:0 0 15px #00cc44;}
-.countdown-row{display:flex;gap:16px;justify-content:center;margin-bottom:32px;}
-.count-box{text-align:center;background:rgba(0,204,68,0.08);border:1px solid rgba(0,204,68,0.3);border-radius:8px;padding:12px 16px;min-width:64px;}
-.count-num{font-size:clamp(22px,4vw,40px);font-weight:900;color:#00cc44;display:block;font-family:'Courier New',monospace;}
-.count-lbl{font-size:10px;color:#555;letter-spacing:2px;text-transform:uppercase;margin-top:2px;}
-.pk-line{font-size:clamp(13px,2.5vw,20px);color:#00cc44;letter-spacing:5px;font-weight:700;text-transform:uppercase;animation:pk-glow 1.2s ease-in-out infinite alternate;margin-bottom:6px;}
-.pk-flag-row{font-size:22px;letter-spacing:4px;margin-bottom:22px;}
-.url{font-size:13px;color:#444;letter-spacing:3px;margin-top:8px;}
-.url a{color:#00cc44;text-decoration:none;}
-.dots{display:flex;gap:8px;justify-content:center;margin-top:24px;}
-.dot{width:8px;height:8px;border-radius:50%;background:#00cc44;animation:dot-pulse 1.2s ease-in-out infinite;}
-.dot:nth-child(2){animation-delay:0.2s;}
-.dot:nth-child(3){animation-delay:0.4s;}
-@keyframes ring-pulse{0%,100%{box-shadow:0 0 0 0 rgba(0,204,68,0.4),0 0 20px rgba(0,204,68,0.2);}50%{box-shadow:0 0 0 12px rgba(0,204,68,0),0 0 40px rgba(0,204,68,0.4);}}
-@keyframes badge-glow{0%{box-shadow:0 0 5px #00cc44;}100%{box-shadow:0 0 20px #00cc44,0 0 40px rgba(0,204,68,0.3);}}
-@keyframes blink-green{0%,49%{opacity:1;}50%,100%{opacity:0.15;}}
-@keyframes pk-glow{0%{text-shadow:0 0 5px #00cc44;}100%{text-shadow:0 0 20px #00cc44,0 0 40px #00cc44;}}
-@keyframes dot-pulse{0%,80%,100%{transform:scale(0.6);opacity:0.4;}40%{transform:scale(1);opacity:1;}}
-</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Talha — VFX Artist & Video Editor</title>
+  <meta name="description" content="Talha is a VFX Artist and Video Editor crafting cinematic visual experiences." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
 
-<canvas id="c"></canvas>
-<div class="wrap">
-  <div class="pk-badge">&#127477;&#127472; Pakistan on Top &#127477;&#127472;</div>
-  <div class="logo-ring"><div class="logo-inner">C3R</div></div>
-  <div class="title">CO3ER <span>DEV</span></div>
-  <div class="subtitle">Development Studio</div>
-  <div class="divider"></div>
-  <div class="coming-soon">Coming Soon</div>
-  <div class="countdown-row">
-    <div class="count-box"><span class="count-num" id="cd-d">00</span><div class="count-lbl">Days</div></div>
-    <div class="count-box"><span class="count-num" id="cd-h">00</span><div class="count-lbl">Hours</div></div>
-    <div class="count-box"><span class="count-num" id="cd-m">00</span><div class="count-lbl">Mins</div></div>
-    <div class="count-box"><span class="count-num" id="cd-s">00</span><div class="count-lbl">Secs</div></div>
+  <!-- Cursor -->
+  <div class="cur-ring" id="curRing"></div>
+  <div class="cur-dot"  id="curDot"></div>
+
+  <!-- Grain -->
+  <canvas id="grain" class="grain-canvas" aria-hidden="true"></canvas>
+
+  <!-- NAV -->
+  <nav class="nav" id="nav">
+    <a href="index.html" class="nav-logo">T<em>.</em></a>
+    <ul class="nav-links" role="list">
+      <li><a href="#work">Work</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <span class="nav-avail"><span class="avail-dot"></span>Available</span>
+      <button class="nav-menu-btn" id="menuBtn" aria-label="Menu" aria-expanded="false">
+        <span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <a href="#work"       class="mm-link">Work</a>
+    <a href="#about"      class="mm-link">About</a>
+    <a href="#skills"     class="mm-link">Skills</a>
+    <a href="contact.html" class="mm-link">Contact</a>
   </div>
-  <div class="pk-line">&#9733; Pakistan Zindabad &#9733;</div>
-  <div class="pk-flag-row">&#127477;&#127472; &nbsp; &#127477;&#127472; &nbsp; &#127477;&#127472;</div>
-  <div class="url">Visit us at <a href="https://co3er.site">co3er.site</a></div>
-  <div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
-</div>
 
-<script>
-const canvas = document.getElementById('c');
-const ctx = canvas.getContext('2d');
-function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
-resize();
-window.addEventListener('resize',resize);
-const cols=Math.floor(window.innerWidth/18);
-const drops=Array(cols).fill(1);
-const chars='01CO3ERPAKISTANZINDABAD010111';
-function draw(){
-  ctx.fillStyle='rgba(0,0,0,0.06)';
-  ctx.fillRect(0,0,canvas.width,canvas.height);
-  for(let i=0;i<drops.length;i++){
-    const ch=chars[Math.floor(Math.random()*chars.length)];
-    ctx.fillStyle=Math.random()>0.92?'#00ff55':'#004400';
-    ctx.font='14px monospace';
-    ctx.fillText(ch,i*18,drops[i]*18);
-    if(drops[i]*18>canvas.height&&Math.random()>0.975)drops[i]=0;
-    drops[i]++;
-  }
-}
-setInterval(draw,55);
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <!-- Animated reel strips -->
+    <div class="reel" aria-hidden="true">
+      <div class="reel-track" id="reelTrack">
+        <div class="rf rf1"></div><div class="rf rf2"></div>
+        <div class="rf rf3"></div><div class="rf rf4"></div>
+        <div class="rf rf5"></div><div class="rf rf6"></div>
+        <div class="rf rf1"></div><div class="rf rf2"></div>
+      </div>
+    </div>
+    <div class="hero-vignette" aria-hidden="true"></div>
 
-const launch=new Date();
-launch.setDate(launch.getDate()+30);
-function tick(){
-  const now=new Date();
-  const diff=Math.max(0,launch-now);
-  const d=Math.floor(diff/86400000);
-  const h=Math.floor((diff%86400000)/3600000);
-  const m=Math.floor((diff%3600000)/60000);
-  const s=Math.floor((diff%60000)/1000);
-  document.getElementById('cd-d').textContent=String(d).padStart(2,'0');
-  document.getElementById('cd-h').textContent=String(h).padStart(2,'0');
-  document.getElementById('cd-m').textContent=String(m).padStart(2,'0');
-  document.getElementById('cd-s').textContent=String(s).padStart(2,'0');
-}
-tick();
-setInterval(tick,1000);
-</script>
+    <!-- HUD corners -->
+    <div class="hud hud-tl" aria-hidden="true">
+      <span class="hud-tag">VFX · EDITOR</span>
+    </div>
+    <div class="hud hud-tr" aria-hidden="true">
+      <span id="frameCount">001</span> / 008
+    </div>
+    <div class="hud hud-bl" aria-hidden="true">
+      <span class="hud-tag">EST. 2018</span>
+    </div>
+    <div class="hud hud-br" aria-hidden="true">
+      <span class="hud-status">● REC</span>
+    </div>
+
+    <div class="hero-inner">
+      <p class="hero-eyebrow">
+        <span class="ey-line"></span>
+        VFX Artist &amp; Video Editor
+        <span class="ey-line"></span>
+      </p>
+      <h1 class="hero-title">
+        <span class="ht" data-delay="0">Crafting</span>
+        <span class="ht italic gold" data-delay="1">Cinematic</span>
+        <span class="ht" data-delay="2">Worlds</span>
+      </h1>
+      <p class="hero-sub">
+        Talha brings stories to life through visual effects,<br>
+        motion design, and precision post-production.
+      </p>
+      <div class="hero-btns">
+        <a href="#work" class="btn-p">View Showreel</a>
+        <a href="contact.html" class="btn-g">Get in Touch</a>
+      </div>
+    </div>
+
+    <a href="#work" class="hero-scroll" aria-label="Scroll down">
+      <div class="scroll-mouse"><div class="scroll-whl"></div></div>
+      <span>Scroll</span>
+    </a>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee" aria-hidden="true">
+    <div class="mq-track">
+      <span>Visual Effects</span><span class="mq-dot">✦</span>
+      <span>Color Grading</span><span class="mq-dot">✦</span>
+      <span>Motion Design</span><span class="mq-dot">✦</span>
+      <span>Compositing</span><span class="mq-dot">✦</span>
+      <span>3D Integration</span><span class="mq-dot">✦</span>
+      <span>Post Production</span><span class="mq-dot">✦</span>
+      <span>Visual Effects</span><span class="mq-dot">✦</span>
+      <span>Color Grading</span><span class="mq-dot">✦</span>
+      <span>Motion Design</span><span class="mq-dot">✦</span>
+      <span>Compositing</span><span class="mq-dot">✦</span>
+      <span>3D Integration</span><span class="mq-dot">✦</span>
+      <span>Post Production</span><span class="mq-dot">✦</span>
+    </div>
+  </div>
+
+ <!-- WORK -->
+  <section class="work" id="work">
+    <div class="work-header">
+      <span class="work-header-num">02</span>
+      <h2>SELECTED WORK</h2>
+      <span class="work-header-count">04 Projects</span>
+    </div>
+    <div class="work-grid">
+      <article class="wi wi-large" data-reveal>
+        <div class="wi-visual wv1">
+          <video class="wi-bg-video" src="Project1.mp4" muted loop playsinline></video>
+          <div class="wi-num-bg" aria-hidden="true">01</div>
+          <span class="wi-category">Feature Film</span>
+          <button class="wi-play" onclick="openVideo('Project1.mp4')" aria-label="Play video"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></button>
+        </div>
+        <div class="wi-meta">
+          <span class="wi-num">01</span>
+          <div class="wi-text"><h3>Country Club</h3><p>Country Club Estate</p></div>
+          <div class="wi-tags"><span>VFX</span><span>Compositing</span><span>Film</span></div>
+        </div>
+      </article>
+      <article class="wi" data-reveal>
+        <div class="wi-visual wv2">
+          <video class="wi-bg-video" src="Project2.mp4" muted loop playsinline></video>
+          <div class="wi-num-bg" aria-hidden="true">02</div>
+          <span class="wi-category">Brand Video</span>
+          <button class="wi-play" onclick="openVideo('Project2.mp4')" aria-label="Play video"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></button>
+        </div>
+        <div class="wi-meta">
+          <span class="wi-num">02</span>
+          <div class="wi-text"><h3>Brand Video</h3><p>Hunger ends here</p></div>
+          <div class="wi-tags"><span>Motion</span><span>Brand</span></div>
+        </div>
+      </article>
+      <article class="wi" data-reveal>
+        <div class="wi-visual wv3">
+          <video class="wi-bg-video" src="Project3.mp4" muted loop playsinline></video>
+          <div class="wi-num-bg" aria-hidden="true">03</div>
+          <span class="wi-category">Brand Video</span>
+          <button class="wi-play" onclick="openVideo('project3.mp4')" aria-label="Play video"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></button>
+        </div>
+        <div class="wi-meta">
+          <span class="wi-num">03</span>
+          <div class="wi-text"><h3>Brand Video</h3><p>Sitara fashion film</p></div>
+          <div class="wi-tags"><span>VFX</span><span>Grade</span></div>
+        </div>
+      </article>
+      <article class="wi" data-reveal>
+        <div class="wi-visual wv4">
+          <video class="wi-bg-video" src="Project4.mp4" muted loop playsinline></video>
+          <div class="wi-num-bg" aria-hidden="true">04</div>
+          <span class="wi-category">VFX Edit</span>
+          <button class="wi-play" onclick="openVideo('project4.mp4')" aria-label="Play video"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></button>
+        </div>
+        <div class="wi-meta">
+          <span class="wi-num">04</span>
+          <div class="wi-text"><h3>VFX Edit</h3><p>Beyond the screen</p></div>
+          <div class="wi-tags"><span>Sci-Fi</span><span>Particles</span></div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="about-grid">
+
+      <!-- Photo side -->
+      <div class="about-photo-col" data-reveal>
+        <div class="about-photo-wrap">
+          <!--
+            ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            TO ADD YOUR PHOTO:
+            Replace the <div class="photo-placeholder"> below
+            with: <img src="talha.png" alt="Talha" class="about-photo" />
+            and add this to styles.css:
+            .about-photo { width:100%; height:100%; object-fit:cover; border-radius:2px; }
+            ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+          -->
+          <img src="talha.png" alt="Talha" class="about-photo" />
+
+          <!-- Floating stat badge -->
+          <div class="photo-badge">
+            <span class="pb-num">50+</span>
+            <span class="pb-label">Projects<br>Delivered</span>
+          </div>
+
+          <!-- Film grain strip on side -->
+          <div class="photo-strip" aria-hidden="true">
+            <div class="ps-hole"></div>
+            <div class="ps-hole"></div>
+            <div class="ps-hole"></div>
+            <div class="ps-hole"></div>
+            <div class="ps-hole"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Text side -->
+      <div class="about-text-col">
+        <div class="sec-label" data-reveal>
+          <span class="sl-num">03</span>
+          <span class="sl-line"></span>
+          <span>About</span>
+        </div>
+
+        <h2 class="about-h2" data-reveal>
+          Every frame<br><em>tells a story.</em>
+        </h2>
+
+        <p class="about-p" data-reveal>
+          I'm Talha — a VFX artist and video editor with a passion for creating visuals that make audiences forget they're watching pixels. From blockbuster-scale compositing to intimate brand storytelling, I bring technical precision and artistic intuition to every project.
+        </p>
+        <p class="about-p" data-reveal>
+          With over 6 years in post-production, I've collaborated with directors, studios, and brands across film, commercials, and music videos — always pushing the boundary between real and imagined.
+        </p>
+
+        <!-- Timeline -->
+        <div class="timeline" data-reveal>
+          <div class="tl-item">
+            <span class="tl-year">2018</span>
+            <div class="tl-dot"></div>
+            <p class="tl-text">Started in post-production</p>
+          </div>
+          <div class="tl-item">
+            <span class="tl-year">2020</span>
+            <div class="tl-dot"></div>
+            <p class="tl-text">First feature film credit</p>
+          </div>
+          <div class="tl-item">
+            <span class="tl-year">2022</span>
+            <div class="tl-dot"></div>
+            <p class="tl-text">Launched freelance studio</p>
+          </div>
+          <div class="tl-item">
+            <span class="tl-year">Now</span>
+            <div class="tl-dot tl-now"></div>
+            <p class="tl-text">50+ projects, 30+ clients</p>
+          </div>
+        </div>
+
+        <div class="about-stats" data-reveal>
+          <div class="astat"><span>6+</span><p>Years Experience</p></div>
+          <div class="astat"><span>50+</span><p>Projects</p></div>
+          <div class="astat"><span>30+</span><p>Happy Clients</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section class="skills" id="skills">
+    <div class="sec-label" data-reveal>
+      <span class="sl-num">04</span>
+      <span class="sl-line"></span>
+      <span>Skills &amp; Tools</span>
+    </div>
+
+    <div class="skills-grid">
+      <div class="skill-col" data-reveal>
+        <h3 class="sk-head">Craft</h3>
+        <div class="sbars">
+          <div class="sbar"><div class="sb-row"><span>Visual Effects</span><span class="sb-pct">95%</span></div><div class="sb-track"><div class="sb-fill" data-w="95"></div></div></div>
+          <div class="sbar"><div class="sb-row"><span>Video Editing</span><span class="sb-pct">92%</span></div><div class="sb-track"><div class="sb-fill" data-w="92"></div></div></div>
+          <div class="sbar"><div class="sb-row"><span>Compositing</span><span class="sb-pct">90%</span></div><div class="sb-track"><div class="sb-fill" data-w="90"></div></div></div>
+          <div class="sbar"><div class="sb-row"><span>Color Grading</span><span class="sb-pct">88%</span></div><div class="sb-track"><div class="sb-fill" data-w="88"></div></div></div>
+          <div class="sbar"><div class="sb-row"><span>Motion Graphics</span><span class="sb-pct">85%</span></div><div class="sb-track"><div class="sb-fill" data-w="85"></div></div></div>
+          <div class="sbar"><div class="sb-row"><span>3D Integration</span><span class="sb-pct">78%</span></div><div class="sb-track"><div class="sb-fill" data-w="78"></div></div></div>
+        </div>
+      </div>
+
+      <div class="skill-col" data-reveal>
+        <h3 class="sk-head">Software</h3>
+        <div class="tools">
+          <div class="tool featured">After Effects</div>
+          <div class="tool">Premiere Pro</div>
+          <div class="tool featured">DaVinci Resolve</div>
+          <div class="tool">Nuke</div>
+          <div class="tool">Blender</div>
+          <div class="tool">Cinema 4D</div>
+          <div class="tool wide">Mocha Pro</div>
+          <div class="tool">Photoshop</div>
+          <div class="tool">Houdini</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BAND -->
+  <div class="cta-band" data-reveal>
+    <p class="cta-band-text">Ready to create something <em>unforgettable?</em></p>
+    <a href="contact.html" class="btn-p">Start a Project</a>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-top">
+      <div class="footer-logo">T<em>.</em></div>
+      <p class="footer-tagline">Making the impossible look <em>inevitable.</em></p>
+    </div>
+    <div class="footer-mid">
+      <div class="footer-col">
+        <p class="fc-label">Navigate</p>
+        <a href="#work">Work</a>
+        <a href="#about">About</a>
+        <a href="#skills">Skills</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="footer-col">
+        <p class="fc-label">Connect</p>
+        <a href="#">Instagram</a>
+        <a href="#">Vimeo</a>
+        <a href="#">LinkedIn</a>
+        <a href="#">Behance</a>
+      </div>
+      <div class="footer-col">
+        <p class="fc-label">Get in touch</p>
+        <a href="mailto:Talhaavaan@gmail.com" class="footer-email">Talhaavaan@gmail.com</a>
+        <a href="contact.html" class="btn-p sm">Start a Project</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Talha. All rights reserved.</span>
+      <span>VFX Artist &amp; Video Editor</span>
+    </div>
+    <div class="footer-dev">
+      Developed by <a href="https://co3er.site" target="_blank" rel="noopener">Co3er Development</a>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
