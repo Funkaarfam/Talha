@@ -12,6 +12,21 @@
 </head>
 <body>
 
+  <!-- Announcement Banner -->
+  <div class="announce-bar" id="announceBar" role="alert">
+    <span class="announce-dot"></span>
+    <span class="announce-text">
+      <em>Maintenance Notice</em> — Co3er.site is currently undergoing scheduled maintenance.
+      Some features may be temporarily unavailable.
+      <a href="https://co3er.site" target="_blank" rel="noopener" class="announce-link">Status &rarr;</a>
+    </span>
+    <button class="announce-close" id="announceClose" aria-label="Dismiss notice">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+        <line x1="1" y1="1" x2="11" y2="11"/><line x1="11" y1="1" x2="1" y2="11"/>
+      </svg>
+    </button>
+  </div>
+
   <!-- Cursor -->
   <div class="cur-ring" id="curRing"></div>
   <div class="cur-dot"  id="curDot"></div>
@@ -155,7 +170,7 @@
           <video class="wi-bg-video" src="Project3.mp4" muted loop playsinline></video>
           <div class="wi-num-bg" aria-hidden="true">03</div>
           <span class="wi-category">Brand Video</span>
-          <button class="wi-play" onclick="openVideo('project3.mp4')" aria-label="Play video"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></button>
+          <button class="wi-play" onclick="openVideo('Project3.mp4')" aria-label="Play video"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></button>
         </div>
         <div class="wi-meta">
           <span class="wi-num">03</span>
@@ -168,7 +183,7 @@
           <video class="wi-bg-video" src="Project4.mp4" muted loop playsinline></video>
           <div class="wi-num-bg" aria-hidden="true">04</div>
           <span class="wi-category">VFX Edit</span>
-          <button class="wi-play" onclick="openVideo('project4.mp4')" aria-label="Play video"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></button>
+          <button class="wi-play" onclick="openVideo('Project4.mp4')" aria-label="Play video"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></button>
         </div>
         <div class="wi-meta">
           <span class="wi-num">04</span>
@@ -348,5 +363,23 @@
   </footer>
 
   <script src="main.js"></script>
+  <script>
+    // Announcement banner dismiss
+    (function() {
+      var bar = document.getElementById('announceBar');
+      var btn = document.getElementById('announceClose');
+      if (!bar || !btn) return;
+      if (!sessionStorage.getItem('announceDismissed')) {
+        document.body.classList.add('has-announce');
+      } else {
+        bar.classList.add('hidden');
+      }
+      btn.addEventListener('click', function() {
+        bar.classList.add('hidden');
+        document.body.classList.remove('has-announce');
+        sessionStorage.setItem('announceDismissed', '1');
+      });
+    })();
+  </script>
 </body>
 </html>
